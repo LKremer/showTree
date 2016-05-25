@@ -20,7 +20,8 @@ showTree requires Python2.7 or Python3.4+ and the following Python packages:
 Usage
 ------------
 
-`usage: showTree [-h] -c CONFIG -m MSA -t TREE [-o OUTPUT_PATH]
+```
+usage: showTree [-h] -c CONFIG -m MSA -t TREE [-o OUTPUT_PATH]
                 [-s SCALE_FACTOR] [-hl [HIGHLIGHT [HIGHLIGHT ...]]] [-r ROOT]
                 [-n] [-hn HIDE_NODES [HIDE_NODES ...]]
 
@@ -55,4 +56,5 @@ required arguments:
                         "_aln.fa"
   -t TREE, --tree TREE  Path to the best-scoring RAxML tree with support
                         values (not as branch labels) produced by calcTree,
-                        usually named "RAxML_bipartitions.(...)_aln.tree"`
+                        usually named "RAxML_bipartitions.(...)_aln.tree"
+```
