@@ -1,8 +1,9 @@
 showTree
 =========
 
-A visualization tool that for gene/protein families.  
+A visualization tool for gene/protein families.  
 Displays a gene tree with the corresponding MSA and protein domains next to it.
+
 
 
 Requirements
@@ -65,3 +66,11 @@ required arguments:
                         values (not as branch labels) produced by calcTree,
                         usually named "RAxML_bipartitions.(...)_aln.tree"
 ```
+
+Example output
+------------
+
+An example output tree that was generated with the command
+`showTree -m ORTHO_ALL1421_aln.fa -c geneSearchConfig.txt -t RAxML_bipartitions.ORTHO_ALL1421_aln.tree -s 0.5 -o tree.pdf`
+
+![example_tree](http://i.imgur.com/k52BxkR.png)
