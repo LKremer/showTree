@@ -45,7 +45,7 @@ class DomTreeMaker(object):
                 if plus_sep:
                     sep = '+'
                 elif comma_sep:
-                    sep=','
+                    sep = ','
                 elif comma_sep and plus_sep:
                     raise Exception('Cannot use "+" and "," in '
                         'the same highlight option.')
@@ -76,13 +76,21 @@ class DomTreeMaker(object):
             for line in cfg:
                 if line.startswith('#') or \
                         line.startswith('ortho') or \
+                        line.startswith('augustus') or \
                         line.startswith('!targets')or \
                         not line.strip():
                     continue
-                dom_file_path = line.strip().split()[-1]
+                dom_file_path = line.strip().split()[2]
                 self.dom_files.add(dom_file_path)
         print('Found these domain annotations:')
         print('\t' + '\n\t'.join(self.dom_files) + '\n')
+
+    def get_gene_list(self):
+        t = Tree(self.tree_path)
+        gene_set = set()
+        for leaf in t:
+            gene_set.add(leaf.name)
+        return gene_set
 
     def parse_msa(self):
         '''
@@ -115,6 +123,7 @@ class DomTreeMaker(object):
         are contained in the MSA file.
         '''
         this_annot = set()
+        gene_set = self.get_gene_list()
         with open(dom_annot_path, 'r') as df:
             for line in df:
                 if line.startswith('#') or not line.strip():
@@ -125,30 +134,38 @@ class DomTreeMaker(object):
                     print('\033[31m Warning! The ID {} is listed in '
                           'multiple domain annotations!\033[0m'.format(gene_id))
                 this_annot.add(gene_id)
-                if gene_id in self.msa_fasta_dict.keys():
+
+                if gene_id in gene_set:
                     ungapped_start, ungapped_stop = \
                         int(fields[1]), int(fields[2])
                     ungapped_start -= 1  # adjusting borders to Pythons 0-indexing
                     ungapped_stop -= 1   # (Pfam domains are 1-indexed)
                     domname = str(fields[6])
                     self.domains.add(domname)
-                    gapped_seq = self.msa_fasta_dict[gene_id]
+                    if self.msa_fasta_dict:
+                        gapped_seq = self.msa_fasta_dict[gene_id]
 
-                    try:
-                        start, stop = self.correct_borders_for_gaps(
-                            gapped_seq, ungapped_start, ungapped_stop
-                        )
-                    except KeyError:
-                        raise DomainIndexError(
-                            dom=domname, annot=dom_annot_path,
-                            plen=len(gapped_seq.replace('-', '')),
-                            b1=ungapped_start, b2=ungapped_stop,
-                            prot=gene_id
-                        )
-                    if gene_id not in self.domain_dict:
-                        self.domain_dict[gene_id] = []
-                    self.domain_dict[gene_id].append(
-                        (domname, start, stop))
+
+                        try:
+                            start, stop = self.correct_borders_for_gaps(
+                                gapped_seq, ungapped_start, ungapped_stop
+                            )
+                        except KeyError:
+                            raise DomainIndexError(
+                                dom=domname, annot=dom_annot_path,
+                                plen=len(gapped_seq.replace('-', '')),
+                                b1=ungapped_start, b2=ungapped_stop,
+                                prot=gene_id
+                            )
+                        if gene_id not in self.domain_dict:
+                            self.domain_dict[gene_id] = []
+                        self.domain_dict[gene_id].append(
+                            (domname, start, stop))
+                    else:
+                        if gene_id not in self.domain_dict:
+                            self.domain_dict[gene_id] = []
+                        self.domain_dict[gene_id].append(
+                            (domname, 1, 1))
 
     def add_background_color_to_nodes(self, t, whole_clade=True):
         for bg_color, prot_ids, whole_clade in self.termnodes_to_highlight:
@@ -191,14 +208,16 @@ class DomTreeMaker(object):
         ts.show_branch_support = True
         ts.scale = 120  # 120 pixels per branch length unit
 
-
         if self.outgroup_node_for_rooting:
             self.root_tree(t)
 
-
         if not self.no_alignment:
-            self.add_background_color_to_nodes(t)
-            self.add_msa_with_domains_to_tree(t)
+            if self.msa_path:
+                self.add_background_color_to_nodes(t)
+                self.add_msa_with_domains_to_tree(t)
+            else:
+                self.add_background_color_to_nodes(t)
+                self.add_domains_to_tree(t)
 
         if self.hide_nodes:
             for word2hide in self.hide_nodes:
@@ -218,6 +237,33 @@ class DomTreeMaker(object):
             print('Wrote output image to', self.out)
         else:
             t.show(tree_style=ts)
+
+    def add_domains_to_tree(self, t):
+        for leaf in t:
+            gene_id = leaf.name
+            domains = self.domain_dict.get(gene_id, [])
+            # if no domains are annotated, 'domains' is an empty list and
+            # no motifs are added to the sequence (for loop won't iterate)
+            motifs = []
+            dom_n = 0
+            for domain in domains:
+                domname, start, stop = domain
+                start = dom_n * 55
+                stop = dom_n * 55 + 50
+                dom_n += 1
+                color_n = self.domains.index(domname)
+                try:
+                    dom_color = COLORS[color_n]
+                except IndexError:
+                    dom_color = 'gray'
+                motifs.append([
+                    start, stop, '()', None, 10, None,
+                    'rgradient:{}'.format(dom_color),
+                    'arial|6|black|{}'.format(domname)
+                ])
+            if len(motifs) > 0:
+                domface = SeqMotifFace(None, motifs=motifs, gap_format='line')
+                (t & gene_id).add_face(domface, column=0, position='aligned')
 
 
     def add_msa_with_domains_to_tree(self, t):
@@ -315,7 +361,10 @@ def main(msa_path, config_path, tree_path, out=False,
          hide_nodes=hide_nodes
     )
     d.parse_config()
-    d.parse_msa()
+    if msa_path != None:
+        d.parse_msa()
+    else:
+        d.msa_fasta_dict = None
     d.collect_domain_info()
     d.show_dom_MSA_tree()
 
@@ -326,10 +375,10 @@ if __name__ == '__main__':
     required.add_argument('-c', '--config', required=True,
                           help='Path to the geneSearch/calcTree '
                           'configuration file')
-    required.add_argument('-m', '--msa', required=True,
+    required.add_argument('-m', '--msa', required=False,
                           help='Path to the untrimmed T-Coffee multiple '
                           'sequence alignment produced by calcTree, '
-                          'usually ends with "_aln.fa"')
+                          'usually ends with "_aln.fa"', default=None)
     required.add_argument('-t', '--tree', required=True,
                           help='Path to the best-scoring RAxML tree with '
                           'support values (not as branch labels) produced '
