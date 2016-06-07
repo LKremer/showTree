@@ -22,10 +22,11 @@ COLORS = [
 
 
 class DomTreeMaker(object):
-    def __init__(self, msa_path, config_path, tree_path, root=None,
-                 out=False, scale_factor=1.0, highlight=None,
-                 no_alignment=False, hide_nodes=False):
+    def __init__(self, msa_path, tree_path, config_path=None, root=None,
+                 out=False, scale_factor=1.0, highlight=None, hide_nodes=False,
+                 no_alignment=False, domain_annotation=None):
         self.msa_path = msa_path
+        self.domain_annotation = domain_annotation
         self.config_path = config_path
         self.tree_path = tree_path
         self.out = out
@@ -47,8 +48,9 @@ class DomTreeMaker(object):
                 elif comma_sep:
                     sep = ','
                 elif comma_sep and plus_sep:
-                    raise Exception('Cannot use "+" and "," in '
-                        'the same highlight option.')
+                    raise Exception(
+                        'Cannot use "+" and "," in the same highlight option.'
+                    )
                 else:
                     sep = 'doesnt_matter'
 
@@ -66,24 +68,34 @@ class DomTreeMaker(object):
                 )
         return termnodes_to_highlight
 
-    def parse_config(self):
+    def get_domain_annot_paths(self):
         '''
-        get the paths to the domain annotations
-        from the geneSearch config file.
+        get the paths to the domain annotation(s) from the geneSearch
+        config file, and/or directly from the --domain_annotation param.
         '''
         self.dom_files = set()
-        with open(self.config_path, 'r') as cfg:
-            for line in cfg:
-                if line.startswith('#') or \
-                        line.startswith('ortho') or \
-                        line.startswith('augustus') or \
-                        line.startswith('!targets')or \
-                        not line.strip():
-                    continue
-                dom_file_path = line.strip().split()[2]
-                self.dom_files.add(dom_file_path)
-        print('Found these domain annotations:')
-        print('\t' + '\n\t'.join(self.dom_files) + '\n')
+        if self.config_path:
+            with open(self.config_path, 'r') as cfg:
+                for line in cfg:
+                    if line.startswith('#') or \
+                            line.startswith('ortho') or \
+                            line.startswith('augustus') or \
+                            line.startswith('!targets')or \
+                            not line.strip():
+                        continue
+                    dom_file_path = line.strip().split()[2]
+                    self.dom_files.add(dom_file_path)
+            print('Found these domain annotations:')
+            print('\t' + '\n\t'.join(self.dom_files) + '\n')
+        if self.domain_annotation:
+            print('You manually specified the domain annotation')
+            print('\t{}\n'.format(self.domain_annotation))
+            self.dom_files.add(self.domain_annotation)
+        if not self.domain_annotation and not self.config_path:
+            print('\nYou did not specify a geneSearch config or '
+                  'domain annotation file, so domains will not be '
+                  'displayed.\n')
+        return
 
     def get_gene_list(self):
         t = Tree(self.tree_path)
@@ -145,7 +157,6 @@ class DomTreeMaker(object):
                     if self.msa_fasta_dict:
                         gapped_seq = self.msa_fasta_dict[gene_id]
 
-
                         try:
                             start, stop = self.correct_borders_for_gaps(
                                 gapped_seq, ungapped_start, ungapped_stop
@@ -170,8 +181,10 @@ class DomTreeMaker(object):
     def add_background_color_to_nodes(self, t, whole_clade=True):
         for bg_color, prot_ids, whole_clade in self.termnodes_to_highlight:
             for prot_id in prot_ids:
-                assert prot_id in t, ('The node "{}" that you want to '
-                    'highlight was not found in your tree!'.format(prot_id))
+                assert prot_id in t, (
+                    'The node "{}" that you want to '
+                    'highlight was not found in your tree!'.format(prot_id)
+                )
             nstyle = NodeStyle()
             nstyle['bgcolor'] = bg_color
             if not whole_clade or len(prot_ids) == 1:
@@ -189,12 +202,12 @@ class DomTreeMaker(object):
             node_ids = self.outgroup_node_for_rooting.split('+')
             ancestor = t.get_common_ancestor(*node_ids)
             t.set_outgroup(ancestor)
-            print('Rooted tree at the clade that contains {}' \
-                '.\n'.format(' and '.join(node_ids)))
+            print('Rooted tree at the clade that contains {}'
+                  '.\n'.format(' and '.join(node_ids)))
         else:
-            t.set_outgroup(t&self.outgroup_node_for_rooting)
-            print('Rooted tree at node "{}"' \
-                '.\n'.format(self.outgroup_node_for_rooting))
+            t.set_outgroup(t & self.outgroup_node_for_rooting)
+            print('Rooted tree at node "{}"'
+                  '.\n'.format(self.outgroup_node_for_rooting))
 
     def show_dom_MSA_tree(self):
         '''
@@ -222,8 +235,8 @@ class DomTreeMaker(object):
         if self.hide_nodes:
             for word2hide in self.hide_nodes:
                 nodes_hidden = []
-                print('\nRemoving these terminal nodes because they contain the '\
-                    'word "{}":'.format(word2hide))
+                print('\nRemoving these terminal nodes because they contain the '
+                      'word "{}":'.format(word2hide))
                 for leaf in t.traverse():
                     if word2hide in leaf.name:
                         nodes_hidden.append(leaf.name)
@@ -265,7 +278,6 @@ class DomTreeMaker(object):
                 domface = SeqMotifFace(None, motifs=motifs, gap_format='line')
                 (t & gene_id).add_face(domface, column=0, position='aligned')
 
-
     def add_msa_with_domains_to_tree(self, t):
         for leaf in t:
             gene_id = leaf.name
@@ -287,14 +299,13 @@ class DomTreeMaker(object):
                     'arial|6|black|{}'.format(domname)
                 ])
             seqface = SeqMotifFace(gapped_seq, gapcolor='gray',
-                                    seq_format='compactseq',
-                                    scale_factor=self.scale_factor)
+                                   seq_format='compactseq',
+                                   scale_factor=self.scale_factor)
             (t & gene_id).add_face(seqface, column=0, position='aligned')
             domface = SeqMotifFace(gapped_seq, motifs=motifs,
-                                    seq_format='blank', gap_format='blank',
-                                    scale_factor=self.scale_factor)
+                                   seq_format='blank', gap_format='blank',
+                                   scale_factor=self.scale_factor)
             (t & gene_id).add_face(domface, column=0, position='aligned')
-        
 
     def map_gapped_to_ungapped_position(self, seq):
         position_map = {}
@@ -348,7 +359,8 @@ class DomainIndexError(Exception):
 
 def main(msa_path, config_path, tree_path, out=False,
          scale_factor=1.0, highlight=None, root=None,
-         no_alignment=False, hide_nodes=False):
+         no_alignment=False, hide_nodes=False,
+         domain_annotation=None):
     d = DomTreeMaker(
          msa_path=msa_path,
          config_path=config_path,
@@ -358,10 +370,11 @@ def main(msa_path, config_path, tree_path, out=False,
          highlight=highlight,
          root=root,
          no_alignment=no_alignment,
-         hide_nodes=hide_nodes
+         hide_nodes=hide_nodes,
+         domain_annotation=domain_annotation,
     )
-    d.parse_config()
-    if msa_path != None:
+    d.get_domain_annot_paths()
+    if msa_path is not None:
         d.parse_msa()
     else:
         d.msa_fasta_dict = None
@@ -372,9 +385,6 @@ def main(msa_path, config_path, tree_path, out=False,
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     required = parser.add_argument_group('required arguments')
-    required.add_argument('-c', '--config', required=True,
-                          help='Path to the geneSearch/calcTree '
-                          'configuration file')
     required.add_argument('-m', '--msa', required=False,
                           help='Path to the untrimmed T-Coffee multiple '
                           'sequence alignment produced by calcTree, '
@@ -384,6 +394,12 @@ if __name__ == '__main__':
                           'support values (not as branch labels) produced '
                           'by calcTree, usually named '
                           '"RAxML_bipartitions.(...)_aln.tree"')
+    parser.add_argument('-c', '--config', default=None,
+                        help='Path to the geneSearch/calcTree '
+                        'configuration file')
+    parser.add_argument('-d', '--domain_annotation', default=None,
+                        help='Path to a Pfam_scan domain annotation '
+                        'of the proteins')
     parser.add_argument('-o', '--output_path', default=False,
                         help='Path to the output image file (.PDF). '
                         'Tree will be shown in a window if omitted')
@@ -409,7 +425,7 @@ if __name__ == '__main__':
                         action='store_true')
     parser.add_argument('-hn', '--hide_nodes', help='Hide terminal nodes '
                         'that contain the specified text.', nargs='+')
-    
+
     args = parser.parse_args()
 
     main(
@@ -422,4 +438,5 @@ if __name__ == '__main__':
          root=args.root,
          no_alignment=args.no_alignment,
          hide_nodes=args.hide_nodes,
+         domain_annotation=args.domain_annotation,
     )
