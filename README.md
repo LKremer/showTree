@@ -29,12 +29,25 @@ Usage
 ------------
 
 ```
-usage: showTree [-h] -c CONFIG -m MSA -t TREE [-o OUTPUT_PATH]
-                [-s SCALE_FACTOR] [-hl [HIGHLIGHT [HIGHLIGHT ...]]] [-r ROOT]
-                [-n] [-hn HIDE_NODES [HIDE_NODES ...]]
+usage: showTree [-h] [-m MSA] -t TREE [-c CONFIG] [-d DOMAIN_ANNOTATION]                                                                                                                                                         
+                [-o OUTPUT_PATH] [-s SCALE_FACTOR]                                                                                                                                                                               
+                [-hl [HIGHLIGHT [HIGHLIGHT ...]]] [-r ROOT] [-n]
+                [-hn HIDE_NODES [HIDE_NODES ...]]
+
+required arguments:
+  -m MSA, --msa MSA     Path to an untrimmed multiple sequence alignment in
+                        FASTA format (the one produced by calcTree usually
+                        ends with "_aln.fa")
+  -t TREE, --tree TREE  Path to the best-scoring RAxML tree with support
+                        values (not as branch labels) produced by calcTree,
+                        usually named "RAxML_bipartitions.(...)_aln.tree"
 
 optional arguments:
   -h, --help            show this help message and exit
+  -c CONFIG, --config CONFIG
+                        Path to the geneSearch/calcTree configuration file
+  -d DOMAIN_ANNOTATION, --domain_annotation DOMAIN_ANNOTATION
+                        Path to a Pfam_scan domain annotation of the proteins
   -o OUTPUT_PATH, --output_path OUTPUT_PATH
                         Path to the output image file (.PDF). Tree will be
                         shown in a window if omitted
@@ -55,16 +68,6 @@ optional arguments:
   -n, --no_alignment    Do not draw the multiple sequence alignment or domains
   -hn HIDE_NODES [HIDE_NODES ...], --hide_nodes HIDE_NODES [HIDE_NODES ...]
                         Hide terminal nodes that contain the specified text.
-
-required arguments:
-  -c CONFIG, --config CONFIG
-                        Path to the geneSearch/calcTree configuration file
-  -m MSA, --msa MSA     Path to the untrimmed T-Coffee multiple sequence
-                        alignment produced by calcTree, usually ends with
-                        "_aln.fa"
-  -t TREE, --tree TREE  Path to the best-scoring RAxML tree with support
-                        values (not as branch labels) produced by calcTree,
-                        usually named "RAxML_bipartitions.(...)_aln.tree"
 ```
 
 Example output

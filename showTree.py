@@ -385,10 +385,10 @@ def main(msa_path, config_path, tree_path, out=False,
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     required = parser.add_argument_group('required arguments')
-    required.add_argument('-m', '--msa', required=False,
-                          help='Path to the untrimmed T-Coffee multiple '
-                          'sequence alignment produced by calcTree, '
-                          'usually ends with "_aln.fa"', default=None)
+    required.add_argument('-m', '--msa', required=False, default=None,
+                          help='Path to an untrimmed multiple sequence '
+                          'alignment in FASTA format (the one produced '
+                          'by calcTree usually ends with "_aln.fa")')
     required.add_argument('-t', '--tree', required=True,
                           help='Path to the best-scoring RAxML tree with '
                           'support values (not as branch labels) produced '
