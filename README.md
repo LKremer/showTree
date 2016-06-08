@@ -1,9 +1,15 @@
 showTree
 =========
 
-A visualization tool for gene/protein families.  
-Displays a gene tree with the corresponding MSA and protein domains next to it.
+A visualization tool for gene/protein families.
+You can provide
+- a multiple sequence alignment (MSA)
+- a gene/protein tree
+- a protein domain annotation
+that will be visualized in a single figure.
 
+These inputs are optional, you may provide any combination of the three e.g.
+tree + domains or tree + MSA or MSA + domains ...
 
 
 Requirements
@@ -29,25 +35,31 @@ Usage
 ------------
 
 ```
-usage: showTree [-h] [-m MSA] -t TREE [-c CONFIG] [-d DOMAIN_ANNOTATION]                                                                                                                                                         
-                [-o OUTPUT_PATH] [-s SCALE_FACTOR]                                                                                                                                                                               
+usage: showTree [-h] [-m MSA] [-t TREE] [-c CONFIG] [-d DOMAIN_ANNOTATION]
+                [-o OUTPUT_PATH] [-s SCALE_FACTOR]
                 [-hl [HIGHLIGHT [HIGHLIGHT ...]]] [-r ROOT] [-n]
                 [-hn HIDE_NODES [HIDE_NODES ...]]
 
-required arguments:
+optional arguments:
+  -h, --help            show this help message and exit
+
+main arguments:
   -m MSA, --msa MSA     Path to an untrimmed multiple sequence alignment in
                         FASTA format (the one produced by calcTree usually
                         ends with "_aln.fa")
   -t TREE, --tree TREE  Path to the best-scoring RAxML tree with support
                         values (not as branch labels) produced by calcTree,
                         usually named "RAxML_bipartitions.(...)_aln.tree"
-
-optional arguments:
-  -h, --help            show this help message and exit
   -c CONFIG, --config CONFIG
                         Path to the geneSearch/calcTree configuration file
+                        (not required if you specify a domain annotation with
+                        "--domain_annotation")
   -d DOMAIN_ANNOTATION, --domain_annotation DOMAIN_ANNOTATION
                         Path to a Pfam_scan domain annotation of the proteins
+                        (not required if all domain annotations are in the
+                        geneSearch config)
+
+additional arguments:
   -o OUTPUT_PATH, --output_path OUTPUT_PATH
                         Path to the output image file (.PDF). Tree will be
                         shown in a window if omitted

@@ -22,7 +22,7 @@ COLORS = [
 
 
 class DomTreeMaker(object):
-    def __init__(self, msa_path, tree_path, config_path=None, root=None,
+    def __init__(self, msa_path, tree_path=None, config_path=None, root=None,
                  out=False, scale_factor=1.0, highlight=None, hide_nodes=False,
                  no_alignment=False, domain_annotation=None):
         self.msa_path = msa_path
@@ -98,11 +98,26 @@ class DomTreeMaker(object):
         return
 
     def get_gene_list(self):
-        t = Tree(self.tree_path)
-        gene_set = set()
-        for leaf in t:
-            gene_set.add(leaf.name)
-        return gene_set
+        '''
+        extracts the protein IDs from the fasta alignment file
+        or from the tree (whatever is available)
+        '''
+        ID_set = set()
+        if self.msa_path:
+            with open(self.msa_path, 'r') as msa_file:
+                for line in msa_file:
+                    if line.startswith('>'):
+                        ID = line.split()[0][1:]
+                        ID_set.add(ID)
+        elif self.tree_path:
+            t = Tree(self.tree_path)
+            ID_set = set()
+            for leaf in t:
+                ID_set.add(leaf.name)
+        else:
+            raise Exception('Cannot determine a list of gene/protein '
+                            'IDs since no tree or MSA was specified.')
+        return ID_set
 
     def parse_msa(self):
         '''
@@ -214,14 +229,34 @@ class DomTreeMaker(object):
         Plot the gene tree with a MSA+domains aligned next to it,
         or alternatively dump the tree to a file (if self.out was defined)
         '''
-        t = Tree(self.tree_path)
-        ts = TreeStyle()
+        if not self.tree_path:
+            # if no tree was specified, use a "star-shaped" newick tree
+            # as a substitute (all species have the same relatedness)
+            newick_star = '({});'.format(','.join(self.get_gene_list()))
+            t = Tree(newick_star)
+            ts = TreeStyle()
+            ts.show_branch_length = False
+            ts.show_branch_support = False
+            ts.scale = 0  # 0 pixels per branch length unit
+            # make the tree disappear:
+            nstyle = NodeStyle()
+            nstyle['size'] = 0
+            nstyle['hz_line_color'] = 'white'
+            nstyle['vt_line_color'] = 'white'
+            for n in t.traverse():
+                n.set_style(nstyle)
+        else:
+            t = Tree(self.tree_path)
+            ts = TreeStyle()
+            ts.show_branch_length = True
+            ts.show_branch_support = True
+            ts.scale = 120  # 120 pixels per branch length unit
         ts.show_leaf_name = True
-        ts.show_branch_length = True
-        ts.show_branch_support = True
-        ts.scale = 120  # 120 pixels per branch length unit
+        ts.show_scale = False
 
         if self.outgroup_node_for_rooting:
+            assert self.tree_path, ('Rooting doesn\'t make sense if '
+                                    'you don\'t specify a tree file!')
             self.root_tree(t)
 
         if not self.no_alignment:
@@ -376,7 +411,7 @@ def main(msa_path, config_path, tree_path, out=False,
     d.get_domain_annot_paths()
     if msa_path is not None:
         d.parse_msa()
-    else:
+    else:  # why was this required again? ...
         d.msa_fasta_dict = None
     d.collect_domain_info()
     d.show_dom_MSA_tree()
@@ -384,59 +419,73 @@ def main(msa_path, config_path, tree_path, out=False,
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    required = parser.add_argument_group('required arguments')
-    required.add_argument('-m', '--msa', required=False, default=None,
-                          help='Path to an untrimmed multiple sequence '
-                          'alignment in FASTA format (the one produced '
-                          'by calcTree usually ends with "_aln.fa")')
-    required.add_argument('-t', '--tree', required=True,
-                          help='Path to the best-scoring RAxML tree with '
-                          'support values (not as branch labels) produced '
-                          'by calcTree, usually named '
-                          '"RAxML_bipartitions.(...)_aln.tree"')
-    parser.add_argument('-c', '--config', default=None,
-                        help='Path to the geneSearch/calcTree '
-                        'configuration file')
-    parser.add_argument('-d', '--domain_annotation', default=None,
-                        help='Path to a Pfam_scan domain annotation '
-                        'of the proteins')
-    parser.add_argument('-o', '--output_path', default=False,
-                        help='Path to the output image file (.PDF). '
-                        'Tree will be shown in a window if omitted')
-    parser.add_argument('-s', '--scale_factor', default=1.0, type=float,
-                        help='Horizontal scaling factor of the MSA '
-                        '(default: 1.0). '
-                        'Decrease this value if your image is too wide!')
-    parser.add_argument('-hl', '--highlight', nargs='*',
-                        help='Highlight specific clades or terminal nodes '
-                        'with a background color. '
-                        'Comma-separated IDs will colour each terminal '
-                        'node separately. '
-                        'Plus-separated IDs will colour the whole clade '
-                        'that contains those IDs. '
-                        'Example: --highlight red:prot01,prot02,prot03 '
-                        'green:prot04 lightyellow:prot05+prot06')
-    parser.add_argument('-r', '--root', help='Set an outgroup node at which '
-                        'the tree will be rooted. If multiple IDs are '
-                        'specified (plus-separated), the whole clade that '
-                        'contains these IDs will be used for rooting')
-    parser.add_argument('-n', '--no_alignment', help='Do not draw the '
-                        'multiple sequence alignment or domains',
-                        action='store_true')
-    parser.add_argument('-hn', '--hide_nodes', help='Hide terminal nodes '
-                        'that contain the specified text.', nargs='+')
+    main_args = parser.add_argument_group('main arguments')
+    add_args = parser.add_argument_group('additional arguments')
+    main_args.add_argument('-m', '--msa', default=None,
+                           help='Path to an untrimmed multiple sequence '
+                           'alignment in FASTA format (the one produced '
+                           'by calcTree usually ends with "_aln.fa")')
+    main_args.add_argument('-t', '--tree', default=None,
+                           help='Path to the best-scoring RAxML tree with '
+                           'support values (not as branch labels) produced '
+                           'by calcTree, usually named '
+                           '"RAxML_bipartitions.(...)_aln.tree"')
+    main_args.add_argument('-c', '--config', default=None,
+                           help='Path to the geneSearch/calcTree '
+                           'configuration file (not required if you '
+                           'specify a domain annotation with '
+                           '"--domain_annotation")')
+    main_args.add_argument('-d', '--domain_annotation', default=None,
+                           help='Path to a Pfam_scan domain annotation '
+                           'of the proteins (not required if all domain '
+                           'annotations are in the geneSearch config)')
+    add_args.add_argument('-o', '--output_path', default=False,
+                          help='Path to the output image file (.PDF). '
+                          'Tree will be shown in a window if omitted')
+    add_args.add_argument('-s', '--scale_factor', default=1.0, type=float,
+                          help='Horizontal scaling factor of the MSA '
+                          '(default: 1.0). '
+                          'Decrease this value if your image is too wide!')
+    add_args.add_argument('-hl', '--highlight', nargs='*',
+                          help='Highlight specific clades or terminal nodes '
+                          'with a background color. '
+                          'Comma-separated IDs will colour each terminal '
+                          'node separately. '
+                          'Plus-separated IDs will colour the whole clade '
+                          'that contains those IDs. '
+                          'Example: --highlight red:prot01,prot02,prot03 '
+                          'green:prot04 lightyellow:prot05+prot06')
+    add_args.add_argument('-r', '--root', help='Set an outgroup node at which '
+                          'the tree will be rooted. If multiple IDs are '
+                          'specified (plus-separated), the whole clade that '
+                          'contains these IDs will be used for rooting')
+    add_args.add_argument('-n', '--no_alignment', help='Do not draw the '
+                          'multiple sequence alignment or domains',
+                          action='store_true')
+    add_args.add_argument('-hn', '--hide_nodes', help='Hide terminal nodes '
+                          'that contain the specified text.', nargs='+')
 
     args = parser.parse_args()
+
+    assert any([args.msa, args.tree]), '''
+\nFor visualization, you need to specify at least one of these files:
+ - a multiple sequence alignment (--msa)
+ - a gene/protein tree (--tree)
+
+Optionally, you can specify protein domain annotations 
+using --config or --domain_annotation
+
+Read the help (--help) for further information.'''
 
     main(
          msa_path=args.msa,
          config_path=args.config,
          tree_path=args.tree,
+         domain_annotation=args.domain_annotation,
          out=args.output_path,
          scale_factor=args.scale_factor,
          highlight=args.highlight,
          root=args.root,
          no_alignment=args.no_alignment,
          hide_nodes=args.hide_nodes,
-         domain_annotation=args.domain_annotation,
     )
