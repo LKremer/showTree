@@ -1,25 +1,29 @@
-showTree
+showTree, a visualization tool for gene/protein families.
 =========
 
-A visualization tool for gene/protein families.
-You can provide
+showTree can visualize the following files in a single figure:
 - a multiple sequence alignment (MSA)
 - a gene/protein tree
 - a protein domain annotation
-that will be visualized in a single figure.
 
-These inputs are optional, you may provide any combination of the three e.g.
-tree + domains or tree + MSA or MSA + domains ...
+
+The inputs above can be combined freely, e.g. you may provide any combination 
+such as
+- tree + MSA + domains
+- tree + MSA
+- tree + domains
+- MSA + domains
+- ...
+
 
 
 Requirements
 ------------
 
 The input files (MSA and gene tree) can be computed with [calcTree](https://ebbgit.uni-muenster.de/ckeme_01/geneSearch/wikis/calcTree).
-showTree also requires a config file that lists the paths to protein domain 
-annotations. This config has the same format as the [geneSearch](https://ebbgit.uni-muenster.de/ckeme_01/geneSearch/)
-config file, but not all entries are required (e.g. you can remove the path
-to the orthology file and can replace the paths to the proteome fastas with "-".)
+showTree can also parse the [calcTree](https://ebbgit.uni-muenster.de/ckeme_01/geneSearch/wikis/calcTree)
+config file to automatically find the domain annotation of proteins in the MSA.
+Alternatively, you can provide your own (pfam_scan) domain annotation.
 
 
 showTree requires Python2.7 or Python3.4+ and the following Python packages:
