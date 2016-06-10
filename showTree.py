@@ -24,7 +24,7 @@ COLORS = [
 class DomTreeMaker(object):
     def __init__(self, msa_path, tree_path=None, config_path=None, root=None,
                  out=False, scale_factor=1.0, highlight=None, hide_nodes=False,
-                 no_alignment=False, domain_annotation=None):
+                 domain_annotation=None):
         self.msa_path = msa_path
         self.domain_annotation = domain_annotation
         self.config_path = config_path
@@ -33,7 +33,6 @@ class DomTreeMaker(object):
         self.scale_factor = scale_factor
         self.termnodes_to_highlight = self.parse_highlight_option(highlight)
         self.outgroup_node_for_rooting = root
-        self.no_alignment = no_alignment
         self.hide_nodes = hide_nodes
 
     def parse_highlight_option(self, hl_list):
@@ -259,13 +258,12 @@ class DomTreeMaker(object):
                                     'you don\'t specify a tree file!')
             self.root_tree(t)
 
-        if not self.no_alignment:
-            if self.msa_path:
-                self.add_background_color_to_nodes(t)
-                self.add_msa_with_domains_to_tree(t)
-            else:
-                self.add_background_color_to_nodes(t)
-                self.add_domains_to_tree(t)
+        if self.msa_path:
+            self.add_background_color_to_nodes(t)
+            self.add_msa_with_domains_to_tree(t)
+        else:
+            self.add_background_color_to_nodes(t)
+            self.add_domains_to_tree(t)
 
         if self.hide_nodes:
             for word2hide in self.hide_nodes:
@@ -394,8 +392,7 @@ class DomainIndexError(Exception):
 
 def main(msa_path, config_path, tree_path, out=False,
          scale_factor=1.0, highlight=None, root=None,
-         no_alignment=False, hide_nodes=False,
-         domain_annotation=None):
+         hide_nodes=False, domain_annotation=None):
     d = DomTreeMaker(
          msa_path=msa_path,
          config_path=config_path,
@@ -404,7 +401,6 @@ def main(msa_path, config_path, tree_path, out=False,
          scale_factor=scale_factor,
          highlight=highlight,
          root=root,
-         no_alignment=no_alignment,
          hide_nodes=hide_nodes,
          domain_annotation=domain_annotation,
     )
@@ -459,9 +455,6 @@ if __name__ == '__main__':
                           'the tree will be rooted. If multiple IDs are '
                           'specified (plus-separated), the whole clade that '
                           'contains these IDs will be used for rooting')
-    add_args.add_argument('-n', '--no_alignment', help='Do not draw the '
-                          'multiple sequence alignment or domains',
-                          action='store_true')
     add_args.add_argument('-hn', '--hide_nodes', help='Hide terminal nodes '
                           'that contain the specified text.', nargs='+')
 
@@ -486,6 +479,5 @@ Read the help (--help) for further information.'''
          scale_factor=args.scale_factor,
          highlight=args.highlight,
          root=args.root,
-         no_alignment=args.no_alignment,
          hide_nodes=args.hide_nodes,
     )
