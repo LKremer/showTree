@@ -231,11 +231,12 @@ class DomTreeMaker(object):
         if not self.tree_path:
             # if no tree was specified, use a "star-shaped" newick tree
             # as a substitute (all species have the same relatedness)
-            newick_star = '({});'.format(','.join(self.get_gene_list()))
+            newick_star = '({});'.format(','.join(sorted(self.get_gene_list())))
             t = Tree(newick_star)
             ts = TreeStyle()
             ts.show_branch_length = False
             ts.show_branch_support = False
+            ts.branch_vertical_margin = 10
             ts.scale = 0  # 0 pixels per branch length unit
             # make the tree disappear:
             nstyle = NodeStyle()
