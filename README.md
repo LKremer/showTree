@@ -39,10 +39,11 @@ Usage
 ------------
 
 ```
-usage: showTree [-h] [-m MSA] [-t TREE] [-c CONFIG] [-d DOMAIN_ANNOTATION]
-                [-o OUTPUT_PATH] [-s SCALE_FACTOR]
-                [-hl [HIGHLIGHT [HIGHLIGHT ...]]] [-r ROOT] [-n]
-                [-hn HIDE_NODES [HIDE_NODES ...]]
+usage: showTree.py [-h] [-m MSA] [-t TREE]
+                   [-d DOMAIN_ANNOTATION [DOMAIN_ANNOTATION ...]] [-c CONFIG]
+                   [-o OUTPUT_PATH] [-s SCALE_FACTOR]
+                   [-hl [HIGHLIGHT [HIGHLIGHT ...]]] [-r ROOT]
+                   [-hn HIDE_NODES [HIDE_NODES ...]]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -51,17 +52,16 @@ main arguments:
   -m MSA, --msa MSA     Path to an untrimmed multiple sequence alignment in
                         FASTA format (the one produced by calcTree usually
                         ends with "_aln.fa")
-  -t TREE, --tree TREE  Path to the best-scoring RAxML tree with support
-                        values (not as branch labels) produced by calcTree,
-                        usually named "RAxML_bipartitions.(...)_aln.tree"
+  -t TREE, --tree TREE  Path to the best-scoring gene tree with bootstrap
+                        values (not as branch labels) produced by RAxML,
+                        usually the file name starts with"RAxML_bipartitions."
+  -d DOMAIN_ANNOTATION [DOMAIN_ANNOTATION ...], --domain_annotation DOMAIN_ANNOTATION [DOMAIN_ANNOTATION ...]
+                        Path(s) to one or more Pfam_scan domain annotation(s)
+                        of the proteins (standard method to display protein
+                        domains)
   -c CONFIG, --config CONFIG
                         Path to the geneSearch/calcTree configuration file
-                        (not required if you specify a domain annotation with
-                        "--domain_annotation")
-  -d DOMAIN_ANNOTATION, --domain_annotation DOMAIN_ANNOTATION
-                        Path to a Pfam_scan domain annotation of the proteins
-                        (not required if all domain annotations are in the
-                        geneSearch config)
+                        (alternative method to display protein domains)
 
 additional arguments:
   -o OUTPUT_PATH, --output_path OUTPUT_PATH
@@ -81,9 +81,10 @@ additional arguments:
                         If multiple IDs are specified (plus-separated), the
                         whole clade that contains these IDs will be used for
                         rooting
-  -n, --no_alignment    Do not draw the multiple sequence alignment or domains
   -hn HIDE_NODES [HIDE_NODES ...], --hide_nodes HIDE_NODES [HIDE_NODES ...]
-                        Hide terminal nodes that contain the specified text.
+                        Hide terminal nodes that contain the specified
+                        substring; e.g. use "FBpp" to hide all Drosophila
+                        proteins
 ```
 
 Example output

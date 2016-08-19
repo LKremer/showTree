@@ -87,9 +87,11 @@ class DomTreeMaker(object):
             print('Found these domain annotations:')
             print('\t' + '\n\t'.join(self.dom_files) + '\n')
         if self.domain_annotation:
-            print('You manually specified the domain annotation')
-            print('\t{}\n'.format(self.domain_annotation))
-            self.dom_files.add(self.domain_annotation)
+            print('You manually specified the domain annotation(s):')
+            for dom_annot in self.domain_annotation:
+                print('\t{}'.format(dom_annot))
+                self.dom_files.add(dom_annot)
+            print()
         if not self.domain_annotation and not self.config_path:
             print('\nYou did not specify a geneSearch config or '
                   'domain annotation file, so domains will not be '
@@ -423,19 +425,18 @@ if __name__ == '__main__':
                            'alignment in FASTA format (the one produced '
                            'by calcTree usually ends with "_aln.fa")')
     main_args.add_argument('-t', '--tree', default=None,
-                           help='Path to the best-scoring RAxML tree with '
-                           'support values (not as branch labels) produced '
-                           'by calcTree, usually named '
-                           '"RAxML_bipartitions.(...)_aln.tree"')
+                           help='Path to the best-scoring gene tree with '
+                           'bootstrap values (not as branch labels) produced '
+                           'by RAxML, usually the file name starts with'
+                           '"RAxML_bipartitions."')
+    main_args.add_argument('-d', '--domain_annotation', help='Path(s) '
+                           'to one or more Pfam_scan domain annotation(s) '
+                           'of the proteins (standard method to display '
+                           'protein domains)', nargs='+', default=[])
     main_args.add_argument('-c', '--config', default=None,
                            help='Path to the geneSearch/calcTree '
-                           'configuration file (not required if you '
-                           'specify a domain annotation with '
-                           '"--domain_annotation")')
-    main_args.add_argument('-d', '--domain_annotation', default=None,
-                           help='Path to a Pfam_scan domain annotation '
-                           'of the proteins (not required if all domain '
-                           'annotations are in the geneSearch config)')
+                           'configuration file (alternative method to '
+                           'display protein domains)')
     add_args.add_argument('-o', '--output_path', default=False,
                           help='Path to the output image file (.PDF). '
                           'Tree will be shown in a window if omitted')
@@ -457,7 +458,8 @@ if __name__ == '__main__':
                           'specified (plus-separated), the whole clade that '
                           'contains these IDs will be used for rooting')
     add_args.add_argument('-hn', '--hide_nodes', help='Hide terminal nodes '
-                          'that contain the specified text.', nargs='+')
+                          'that contain the specified substring; e.g. use '
+                          '"FBpp" to hide all Drosophila proteins', nargs='+')
 
     args = parser.parse_args()
 
@@ -467,7 +469,7 @@ if __name__ == '__main__':
  - a gene/protein tree (--tree)
 
 Optionally, you can specify protein domain annotations 
-using --config or --domain_annotation
+using --domain_annotation or --config
 
 Read the help (--help) for further information.'''
 
