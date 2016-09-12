@@ -101,7 +101,8 @@ class DomTreeMaker(object):
     def get_gene_list(self):
         '''
         extracts the protein IDs from the fasta alignment file
-        or from the tree (whatever is available)
+        or from the tree (whatever is available). Otherwise,
+        the domain annotation itself will be used to get the IDs.
         '''
         ID_set = set()
         if self.msa_path:
@@ -115,9 +116,13 @@ class DomTreeMaker(object):
             ID_set = set()
             for leaf in t:
                 ID_set.add(leaf.name)
+        elif self.domain_annotation:
+            if self.domain_dict:
+                ID_set = self.domain_dict.keys()
+            else:
+                ID_set = None
         else:
-            raise Exception('Cannot determine a list of gene/protein '
-                            'IDs since no tree or MSA was specified.')
+            raise Exception('This should never happen')
         return ID_set
 
     def parse_msa(self):
@@ -151,7 +156,7 @@ class DomTreeMaker(object):
         are contained in the MSA file.
         '''
         this_annot = set()
-        gene_set = self.get_gene_list()
+        gene_set = self.get_gene_list()  # will be None if neither MSA nor tree were specified
         with open(dom_annot_path, 'r') as df:
             for line in df:
                 if line.startswith('#') or not line.strip():
@@ -163,7 +168,7 @@ class DomTreeMaker(object):
                           'multiple domain annotations!\033[0m'.format(gene_id))
                 this_annot.add(gene_id)
 
-                if gene_id in gene_set:
+                if not gene_set or gene_id in gene_set:  # if no MSA or tree were specified, all pfam_scan entries will be plotted
                     ungapped_start, ungapped_stop = \
                         int(fields[1]), int(fields[2])
                     ungapped_start -= 1  # adjusting borders to Pythons 0-indexing
@@ -463,13 +468,11 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    assert any([args.msa, args.tree]), '''
+    assert any([args.msa, args.tree, args.domain_annotation]), '''
 \nFor visualization, you need to specify at least one of these files:
  - a multiple sequence alignment (--msa)
  - a gene/protein tree (--tree)
-
-Optionally, you can specify protein domain annotations 
-using --domain_annotation or --config
+ - a protein domain annotation (--domain_annotation OR --config)
 
 Read the help (--help) for further information.'''
 
