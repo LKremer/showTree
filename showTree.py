@@ -24,8 +24,9 @@ COLORS = [
 class DomTreeMaker(object):
     def __init__(self, msa_path, tree_path=None, config_path=None, root=None,
                  out=False, scale_factor=1.0, highlight=None, hide_nodes=False,
-                 domain_annotation=None):
+                 domain_annotation=None, gff_path=None):
         self.msa_path = msa_path
+        self.gff_path = gff_path
         self.domain_annotation = domain_annotation
         self.config_path = config_path
         self.tree_path = tree_path
@@ -34,6 +35,7 @@ class DomTreeMaker(object):
         self.termnodes_to_highlight = self.parse_highlight_option(highlight)
         self.outgroup_node_for_rooting = root
         self.hide_nodes = hide_nodes
+        return
 
     def parse_highlight_option(self, hl_list):
         termnodes_to_highlight = []
@@ -104,26 +106,27 @@ class DomTreeMaker(object):
         or from the tree (whatever is available). Otherwise,
         the domain annotation itself will be used to get the IDs.
         '''
-        ID_set = set()
-        if self.msa_path:
-            with open(self.msa_path, 'r') as msa_file:
-                for line in msa_file:
-                    if line.startswith('>'):
-                        ID = line.split()[0][1:]
-                        ID_set.add(ID)
-        elif self.tree_path:
-            t = Tree(self.tree_path)
-            ID_set = set()
-            for leaf in t:
-                ID_set.add(leaf.name)
-        elif self.domain_annotation:
-            if self.domain_dict:
-                ID_set = self.domain_dict.keys()
+        if not hasattr(self, '_gene_list'):
+            self._gene_list = set()
+            if self.msa_path:
+                with open(self.msa_path, 'r') as msa_file:
+                    for line in msa_file:
+                        if line.startswith('>'):
+                            ID = line.split()[0][1:]
+                            self._gene_list.add(ID)
+            elif self.tree_path:
+                t = Tree(self.tree_path)
+                self._gene_list = set()
+                for leaf in t:
+                    self._gene_list.add(leaf.name)
+            elif self.domain_annotation:
+                if self.domain_dict:
+                    self._gene_list = self.domain_dict.keys()
+                else:
+                    self._gene_list = None
             else:
-                ID_set = None
-        else:
-            raise Exception('This should never happen')
-        return ID_set
+                raise Exception('This should never happen')
+        return self._gene_list
 
     def parse_msa(self):
         '''
@@ -137,6 +140,7 @@ class DomTreeMaker(object):
                 seq = str(record.seq)
                 seq_id = header.split()[0]
                 self.msa_fasta_dict[seq_id] = seq
+        return
 
     def collect_domain_info(self):
         '''
@@ -148,6 +152,7 @@ class DomTreeMaker(object):
         for dom_annot_path in self.dom_files:
             self.parse_domain_annotation(dom_annot_path)
         self.domains = list(self.domains)
+        return
 
     def parse_domain_annotation(self, dom_annot_path):
         '''
@@ -198,6 +203,29 @@ class DomTreeMaker(object):
                             self.domain_dict[gene_id] = []
                         self.domain_dict[gene_id].append(
                             (domname, 1, 1))
+        return
+
+    def parse_gff(self, gff_path):
+        ''' parse a GFF file to determine intron positions '''
+        if not hasattr(self, 'cds_length_dict'):
+            self.cds_length_dict = {}
+        gene_list = self.get_gene_list()
+        with open(gff_path, 'r') as gff_file:
+            for line in gff_file:
+                if line.startswith('#') or not line.strip():
+                    continue
+                values = line.strip().split('\t')
+                feature = values[2]
+                if feature.upper() != 'CDS':
+                    continue
+                gff_comment = values[8]
+                for query_gene in gene_list:
+                    if query_gene in gff_comment:
+                        if query_gene not in self.cds_length_dict:
+                            self.cds_length_dict[query_gene] = []
+                        cds_len = (int(values[4]) - int(values[3]) + 1) / 3.0
+                        self.cds_length_dict[query_gene].append(cds_len)
+        return
 
     def add_background_color_to_nodes(self, t, whole_clade=True):
         for bg_color, prot_ids, whole_clade in self.termnodes_to_highlight:
@@ -217,6 +245,7 @@ class DomTreeMaker(object):
                 # colour the whole clade that contains the proteins:
                 node = t.get_common_ancestor(*prot_ids)
                 node.set_style(nstyle)
+        return
 
     def root_tree(self, t):
         if '+' in self.outgroup_node_for_rooting:
@@ -229,6 +258,7 @@ class DomTreeMaker(object):
             t.set_outgroup(t & self.outgroup_node_for_rooting)
             print('Rooted tree at node "{}"'
                   '.\n'.format(self.outgroup_node_for_rooting))
+        return
 
     def show_dom_MSA_tree(self):
         '''
@@ -291,6 +321,7 @@ class DomTreeMaker(object):
             print('Wrote output image to', self.out)
         else:
             t.show(tree_style=ts)
+        return
 
     def add_domains_to_tree(self, t):
         for leaf in t:
@@ -318,6 +349,7 @@ class DomTreeMaker(object):
             if len(motifs) > 0:
                 domface = SeqMotifFace(None, motifs=motifs, gap_format='line')
                 (t & gene_id).add_face(domface, column=0, position='aligned')
+        return
 
     def add_msa_with_domains_to_tree(self, t):
         for leaf in t:
@@ -339,6 +371,27 @@ class DomTreeMaker(object):
                     'rgradient:{}'.format(dom_color),
                     'arial|6|black|{}'.format(domname)
                 ])
+
+            if hasattr(self, 'cds_length_dict'):
+                cds_lengths = self.cds_length_dict[gene_id]
+                current_pos = 1
+                for cds_len in cds_lengths[:-1]:
+                    current_pos += cds_len
+
+                    gapped_seq = self.msa_fasta_dict[gene_id]
+                    try:
+                        gapped_pos, __ = self.correct_borders_for_gaps(
+                            gapped_seq, int(round(current_pos)), 0
+                        )
+                    except KeyError:
+                        raise Exception('The protein sequence of {} is shorter '
+                            'in the MSA than in the GFF!'.format(gene_id))
+
+                    motifs.append([
+                        (gapped_pos - 1), (gapped_pos + 1),
+                        '[]', None, 10, None, 'black', None
+                    ])
+
             seqface = SeqMotifFace(gapped_seq, gapcolor='gray',
                                    seq_format='compactseq',
                                    scale_factor=self.scale_factor)
@@ -347,6 +400,7 @@ class DomTreeMaker(object):
                                    seq_format='blank', gap_format='blank',
                                    scale_factor=self.scale_factor)
             (t & gene_id).add_face(domface, column=0, position='aligned')
+        return
 
     def map_gapped_to_ungapped_position(self, seq):
         position_map = {}
@@ -398,13 +452,14 @@ class DomainIndexError(Exception):
         Exception.__init__(self, e_msg)
 
 
-def main(msa_path, config_path, tree_path, out=False,
-         scale_factor=1.0, highlight=None, root=None,
-         hide_nodes=False, domain_annotation=None):
+def main(msa_path, config_path, tree_path, gff_paths=None,
+         out=False, scale_factor=1.0, highlight=None,
+         root=None, hide_nodes=False, domain_annotation=None):
     d = DomTreeMaker(
          msa_path=msa_path,
          config_path=config_path,
          tree_path=tree_path,
+         gff_path=gff_paths,
          out=out,
          scale_factor=scale_factor,
          highlight=highlight,
@@ -418,7 +473,11 @@ def main(msa_path, config_path, tree_path, out=False,
     else:  # why was this required again? ...
         d.msa_fasta_dict = None
     d.collect_domain_info()
+    if gff_paths is not None:
+        for gff_path in gff_paths:
+            d.parse_gff(gff_path)
     d.show_dom_MSA_tree()
+    return
 
 
 if __name__ == '__main__':
@@ -430,11 +489,12 @@ if __name__ == '__main__':
                            'alignment in FASTA format (the one produced '
                            'by calcTree usually ends with "_aln.fa")')
     main_args.add_argument('-t', '--tree', default=None,
-                           help='Path to the best-scoring gene tree with '
-                           'bootstrap values (not as branch labels) produced '
-                           'by RAxML, usually the file name starts with'
+                           help='Path to a gene tree, i.e. the best-'
+                           'scoring gene tree with bootstrap values '
+                           '(not as branch labels) produced by RAxML, '
+                           'usually the file name starts with'
                            '"RAxML_bipartitions."')
-    main_args.add_argument('-d', '--domain_annotation', help='Path(s) '
+    main_args.add_argument('-d', '--domain_annotations', help='Path(s) '
                            'to one or more Pfam_scan domain annotation(s) '
                            'of the proteins (standard method to display '
                            'protein domains)', nargs='+', default=[])
@@ -442,6 +502,10 @@ if __name__ == '__main__':
                            help='Path to the geneSearch/calcTree '
                            'configuration file (alternative method to '
                            'display protein domains)')
+    add_args.add_argument('-g', '--gffs', default=None,
+                           help='Path to one or more GFF files '
+                           'containing CDS features of the proteins. '
+                           'Used to mark intron positions', nargs='+')
     add_args.add_argument('-o', '--output_path', default=False,
                           help='Path to the output image file (.PDF). '
                           'Tree will be shown in a window if omitted')
@@ -468,11 +532,11 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    assert any([args.msa, args.tree, args.domain_annotation]), '''
+    assert any([args.msa, args.tree, args.domain_annotations]), '''
 \nFor visualization, you need to specify at least one of these files:
  - a multiple sequence alignment (--msa)
  - a gene/protein tree (--tree)
- - a protein domain annotation (--domain_annotation OR --config)
+ - a protein domain annotation (--domain_annotations OR --config)
 
 Read the help (--help) for further information.'''
 
@@ -480,7 +544,8 @@ Read the help (--help) for further information.'''
          msa_path=args.msa,
          config_path=args.config,
          tree_path=args.tree,
-         domain_annotation=args.domain_annotation,
+         domain_annotation=args.domain_annotations,
+         gff_paths=args.gffs,
          out=args.output_path,
          scale_factor=args.scale_factor,
          highlight=args.highlight,
