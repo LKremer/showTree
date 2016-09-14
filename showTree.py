@@ -38,6 +38,11 @@ class DomTreeMaker(object):
         return
 
     def parse_highlight_option(self, hl_list):
+        '''
+        parse the --highlight option to determine
+        which nodes / clades should be marked in
+        which colour.
+        '''
         termnodes_to_highlight = []
         if hl_list:
             for hl_str in hl_list:
@@ -336,6 +341,9 @@ class DomTreeMaker(object):
         return
 
     def add_domains_to_tree(self, t):
+        '''
+        displaying domains without a sequence / MSA
+        '''
         for leaf in t:
             gene_id = leaf.name
             domains = self.domain_dict.get(gene_id, [])
@@ -364,6 +372,10 @@ class DomTreeMaker(object):
         return
 
     def add_msa_with_domains_to_tree(self, t):
+        '''
+        iterating over all sequences in the tree and adding
+        the sequence, domain and intron position visualizations.
+        '''
         for leaf in t:
             gene_id = leaf.name
             gapped_seq = self.msa_fasta_dict[gene_id]
@@ -382,27 +394,30 @@ class DomTreeMaker(object):
                     start, stop, '()', None, 10, None,
                     'rgradient:{}'.format(dom_color),
                     'arial|6|black|{}'.format(domname)
-                ])
+                ])  # domain markers
 
             if hasattr(self, 'cds_length_dict'):
-                cds_lengths = self.cds_length_dict[gene_id]
-                current_pos = 1
-                for cds_len in cds_lengths[:-1]:
-                    current_pos += cds_len
+                if gene_id not in self.cds_length_dict:
+                    print('Warning: No GFF entry found for {}'.format(gene_id))
+                else:
+                    cds_lengths = self.cds_length_dict[gene_id]
+                    current_pos = 1
+                    for cds_len in cds_lengths[:-1]:
+                        current_pos += cds_len
 
-                    gapped_seq = self.msa_fasta_dict[gene_id]
-                    try:
-                        gapped_pos, __ = self.correct_borders_for_gaps(
-                            gapped_seq, int(round(current_pos)), 0
-                        )
-                    except KeyError:
-                        raise Exception('The protein sequence of {} is shorter '
-                            'in the MSA than in the GFF!'.format(gene_id))
+                        gapped_seq = self.msa_fasta_dict[gene_id]
+                        try:
+                            gapped_pos, __ = self.correct_borders_for_gaps(
+                                gapped_seq, int(round(current_pos)), 0
+                            )
+                        except KeyError:
+                            raise Exception('The protein sequence of {} is shorter '
+                                'in the MSA than in the GFF!'.format(gene_id))
 
-                    motifs.append([
-                        (gapped_pos - 1), (gapped_pos + 1),
-                        '[]', None, 10, None, 'black', None
-                    ])
+                        motifs.append([
+                            (gapped_pos - 1), (gapped_pos + 1),
+                            '[]', None, 10, None, 'black', None
+                        ])  # black line that marks the intron positions
 
             seqface = SeqMotifFace(gapped_seq, gapcolor='gray',
                                    seq_format='compactseq',
