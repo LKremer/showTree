@@ -39,11 +39,11 @@ Usage
 ------------
 
 ```
-usage: showTree.py [-h] [-m MSA] [-t TREE]
-                   [-d DOMAIN_ANNOTATIONS [DOMAIN_ANNOTATIONS ...]]
-                   [-c CONFIG] [-g GFFS [GFFS ...]] [-o OUTPUT_PATH]
-                   [-s SCALE_FACTOR] [-hl [HIGHLIGHT [HIGHLIGHT ...]]]
-                   [-r ROOT] [-hn HIDE_NODES [HIDE_NODES ...]]
+usage: showTree [-h] [-m MSA] [-t TREE]
+                [-d DOMAIN_ANNOTATIONS [DOMAIN_ANNOTATIONS ...]] [-c CONFIG]
+                [-g GFFS [GFFS ...]] [-o OUTPUT_PATH] [-s SCALE_FACTOR]
+                [-hl [HIGHLIGHT [HIGHLIGHT ...]]] [-r ROOT]
+                [-hn HIDE_NODES [HIDE_NODES ...]]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -54,8 +54,8 @@ main arguments:
                         ends with "_aln.fa")
   -t TREE, --tree TREE  Path to a gene tree, i.e. the best-scoring gene tree
                         with bootstrap values (not as branch labels) produced
-                        by RAxML, usually the file name starts
-                        with"RAxML_bipartitions."
+                        by RAxML, usually the file name starts with
+                        "RAxML_bipartitions."
   -d DOMAIN_ANNOTATIONS [DOMAIN_ANNOTATIONS ...], --domain_annotations DOMAIN_ANNOTATIONS [DOMAIN_ANNOTATIONS ...]
                         Path(s) to one or more Pfam_scan domain annotation(s)
                         of the proteins (standard method to display protein
@@ -64,10 +64,12 @@ main arguments:
                         Path to the geneSearch/calcTree configuration file
                         (alternative method to display protein domains)
 
-additional arguments:
+additional optional arguments:
   -g GFFS [GFFS ...], --gffs GFFS [GFFS ...]
                         Path to one or more GFF files containing CDS features
-                        of the proteins. Used to mark intron positions
+                        of the proteins. Used to mark intron positions. Only
+                        works if the 9th (=last) column of the GFF contains
+                        the protein IDs
   -o OUTPUT_PATH, --output_path OUTPUT_PATH
                         Path to the output image file (.PDF). Tree will be
                         shown in a window if omitted

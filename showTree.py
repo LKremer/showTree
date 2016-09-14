@@ -210,12 +210,16 @@ class DomTreeMaker(object):
         if not hasattr(self, 'cds_length_dict'):
             self.cds_length_dict = {}
         gene_list = self.get_gene_list()
-        n_found = 0
+        found = False
+        n_weird_lines = 0  # how many lines could not be parsed/are not in GFF format
         with open(gff_path, 'r') as gff_file:
             for line in gff_file:
                 if line.startswith('#') or not line.strip():
                     continue
                 values = line.strip().split('\t')
+                if not is_valid_gff_line(values):
+                    n_weird_lines += 1
+                    continue
                 feature = values[2]
                 if feature.upper() != 'CDS':
                     continue
@@ -224,11 +228,15 @@ class DomTreeMaker(object):
                     if query_gene in gff_comment:
                         if query_gene not in self.cds_length_dict:
                             self.cds_length_dict[query_gene] = []
-                        cds_len = (int(values[4]) - int(values[3]) + 1) / 3.0
-                        self.cds_length_dict[query_gene].append(cds_len)
-                        n_found += 1
-        assert n_found > 0, '\n\nDidn\'t find a relevant protein in {}.\n\nLooked for these:\n{}'.format(
-            gff_path, '\t'.join(self.get_gene_list()))
+                        cds_len = (int(values[4]) - int(values[3])) / 3.0
+                        if cds_len > 3:  # some GFFs have CDSs of length 0, why?!
+                            self.cds_length_dict[query_gene].append(cds_len)
+                        found = True
+        if n_weird_lines:
+            print('\nWarning! The GFF {} contained {} lines that could not be '
+                  'interpreted! Check the file.\n'.format(gff_path, n_weird_lines))
+        assert found, '\n\nDidn\'t find any relevant proteins in {}.\n\n'\
+            'Looked for these:\n{}'.format(gff_path, '\t'.join(gene_list))
         return
 
     def add_background_color_to_nodes(self, t, whole_clade=True):
@@ -455,6 +463,17 @@ class DomainIndexError(Exception):
         '''.format(**kwargs)
         Exception.__init__(self, e_msg)
 
+def is_valid_gff_line(splitline):
+    ''' check if a file line (split) is in valid GFF format '''
+    if not len(splitline) == 9:
+        return False
+    try:
+        feat_len = int(splitline[4]) - int(splitline[3])
+        assert feat_len >= 0
+    except (ValueError, AssertionError):
+        return False
+    return True
+
 
 def main(msa_path, config_path, tree_path, gff_paths=None,
          out=False, scale_factor=1.0, highlight=None,
@@ -487,7 +506,7 @@ def main(msa_path, config_path, tree_path, gff_paths=None,
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     main_args = parser.add_argument_group('main arguments')
-    add_args = parser.add_argument_group('additional arguments')
+    add_args = parser.add_argument_group('additional optional arguments')
     main_args.add_argument('-m', '--msa', default=None,
                            help='Path to an untrimmed multiple sequence '
                            'alignment in FASTA format (the one produced '
@@ -496,7 +515,7 @@ if __name__ == '__main__':
                            help='Path to a gene tree, i.e. the best-'
                            'scoring gene tree with bootstrap values '
                            '(not as branch labels) produced by RAxML, '
-                           'usually the file name starts with'
+                           'usually the file name starts with '
                            '"RAxML_bipartitions."')
     main_args.add_argument('-d', '--domain_annotations', help='Path(s) '
                            'to one or more Pfam_scan domain annotation(s) '
@@ -509,7 +528,9 @@ if __name__ == '__main__':
     add_args.add_argument('-g', '--gffs', default=None,
                            help='Path to one or more GFF files '
                            'containing CDS features of the proteins. '
-                           'Used to mark intron positions', nargs='+')
+                           'Used to mark intron positions. Only works '
+                           'if the 9th (=last) column of the GFF contains '
+                           'the protein IDs', nargs='+')
     add_args.add_argument('-o', '--output_path', default=False,
                           help='Path to the output image file (.PDF). '
                           'Tree will be shown in a window if omitted')
@@ -540,7 +561,7 @@ if __name__ == '__main__':
 \nFor visualization, you need to specify at least one of these files:
  - a multiple sequence alignment (--msa)
  - a gene/protein tree (--tree)
- - a protein domain annotation (--domain_annotations OR --config)
+ - one or more pfam_scan protein domain annotations (--domain_annotations OR --config)
 
 Read the help (--help) for further information.'''
 
