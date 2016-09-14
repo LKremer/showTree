@@ -210,6 +210,7 @@ class DomTreeMaker(object):
         if not hasattr(self, 'cds_length_dict'):
             self.cds_length_dict = {}
         gene_list = self.get_gene_list()
+        n_found = 0
         with open(gff_path, 'r') as gff_file:
             for line in gff_file:
                 if line.startswith('#') or not line.strip():
@@ -225,6 +226,9 @@ class DomTreeMaker(object):
                             self.cds_length_dict[query_gene] = []
                         cds_len = (int(values[4]) - int(values[3]) + 1) / 3.0
                         self.cds_length_dict[query_gene].append(cds_len)
+                        n_found += 1
+        assert n_found > 0, '\n\nDidn\'t find a relevant protein in {}.\n\nLooked for these:\n{}'.format(
+            gff_path, '\t'.join(self.get_gene_list()))
         return
 
     def add_background_color_to_nodes(self, t, whole_clade=True):
