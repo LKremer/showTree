@@ -39,11 +39,11 @@ Usage
 ------------
 
 ```
-usage: showTree [-h] [-m MSA] [-t TREE]
-                [-d DOMAIN_ANNOTATIONS [DOMAIN_ANNOTATIONS ...]] [-c CONFIG]
-                [-g GFFS [GFFS ...]] [-o OUTPUT_PATH] [-s SCALE_FACTOR]
-                [-hl [HIGHLIGHT [HIGHLIGHT ...]]] [-r ROOT]
-                [-hn HIDE_NODES [HIDE_NODES ...]]
+usage: showTree.py [-h] [-m MSA] [-t TREE]
+                   [-d DOMAIN_ANNOTATIONS [DOMAIN_ANNOTATIONS ...]]
+                   [-c CONFIG] [-g GFFS [GFFS ...]] [-o OUTPUT_PATH]
+                   [-s SCALE_FACTOR] [-hl [HIGHLIGHT [HIGHLIGHT ...]]]
+                   [-r ROOT] [-hn HIDE_NODES [HIDE_NODES ...]]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -71,8 +71,9 @@ additional optional arguments:
                         works if the 9th (=last) column of the GFF contains
                         the protein IDs
   -o OUTPUT_PATH, --output_path OUTPUT_PATH
-                        Path to the output image file (.PDF). Tree will be
-                        shown in a window if omitted
+                        Path to the output image file. Must end with .PDF,
+                        .PNG or .SVG. Tree will be shown in a window if
+                        omitted
   -s SCALE_FACTOR, --scale_factor SCALE_FACTOR
                         Horizontal scaling factor of the MSA (default: 1.0).
                         Decrease this value if your image is too wide!

@@ -10,6 +10,7 @@ by Lukas PM Kremer, 2016
 
 from __future__ import print_function
 import argparse
+import os
 from ete3 import Tree, TreeStyle, SeqMotifFace, NodeStyle
 from Bio import SeqIO
 
@@ -332,8 +333,10 @@ class DomTreeMaker(object):
                 print(', '.join(nodes_hidden))
 
         if self.out:
-            if not self.out.upper().endswith('.PDF'):
-                self.out += '.pdf'
+            file_ext = os.path.splitext(self.out.upper())[1]
+            if file_ext not in ('.SVG', '.PDF', '.PNG'):
+                raise Exception('Output image file name must end with '
+                    '".SVG", ".PDF" or ".PNG".')
             t.render(self.out, tree_style=ts)
             print('Wrote output image to', self.out)
         else:
@@ -547,8 +550,9 @@ if __name__ == '__main__':
                            'if the 9th (=last) column of the GFF contains '
                            'the protein IDs', nargs='+')
     add_args.add_argument('-o', '--output_path', default=False,
-                          help='Path to the output image file (.PDF). '
-                          'Tree will be shown in a window if omitted')
+                          help='Path to the output image file. Must end with '
+                          '.PDF, .PNG or .SVG. Tree will be shown in a window '
+                          'if omitted')
     add_args.add_argument('-s', '--scale_factor', default=1.0, type=float,
                           help='Horizontal scaling factor of the MSA '
                           '(default: 1.0). '
