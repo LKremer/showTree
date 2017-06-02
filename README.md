@@ -3,8 +3,8 @@ showTree, a visualization tool for gene/protein families.
 
 showTree can visualize the following files in a single figure:
 - a multiple sequence alignment (MSA)
-- a gene/protein tree
-- a protein domain annotation
+- a gene/protein tree in newick format
+- a protein domain annotation in Pfam_scan output format
 
 
 The inputs above can be combined freely, e.g. you may provide any combination 
