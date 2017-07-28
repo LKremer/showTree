@@ -4,7 +4,7 @@ Visualization of gene trees produced by Carsten Kemenas geneSearch and
 calcTree tools. Next to the gene trees, a MSA including protein domains
 is displayed.
 Works with python2.7 and python3.3+ :)
-by Lukas PM Kremer, 2016
+by Lukas PM Kremer, 2016/17
 '''
 
 
@@ -25,7 +25,7 @@ COLORS = [
 class DomTreeMaker(object):
     def __init__(self, msa_path, tree_path=None, config_path=None, root=None,
                  out=False, scale_factor=1.0, highlight=None, hide_nodes=False,
-                 domain_annotation=None, gff_path=None):
+                 domain_annotation=None, gff_path=None, lineseq=False):
         self.msa_path = msa_path
         self.gff_path = gff_path
         self.domain_annotation = domain_annotation
@@ -36,6 +36,14 @@ class DomTreeMaker(object):
         self.termnodes_to_highlight = self.parse_highlight_option(highlight)
         self.outgroup_node_for_rooting = root
         self.hide_nodes = hide_nodes
+        if lineseq:
+            print("line")
+            self.seq_style = 'line'
+            self.gap_style = 'blank'
+        else:
+            print("compactseq")
+            self.seq_style = 'compactseq'
+            self.gap_style = 'line'
         return
 
     def parse_highlight_option(self, hl_list):
@@ -422,14 +430,10 @@ class DomTreeMaker(object):
                             '[]', None, 10, None, 'black', None
                         ])  # black line that marks the intron positions
 
-            seqface = SeqMotifFace(gapped_seq, gapcolor='gray',
-                                   seq_format='compactseq',
+            seqface = SeqMotifFace(gapped_seq, gapcolor='gray', motifs=motifs,
+                                   seq_format=self.seq_style, gap_format=self.gap_style,
                                    scale_factor=self.scale_factor)
             (t & gene_id).add_face(seqface, column=0, position='aligned')
-            domface = SeqMotifFace(gapped_seq, motifs=motifs,
-                                   seq_format='blank', gap_format='blank',
-                                   scale_factor=self.scale_factor)
-            (t & gene_id).add_face(domface, column=0, position='aligned')
         return
 
     def map_gapped_to_ungapped_position(self, seq):
@@ -495,7 +499,8 @@ def is_valid_gff_line(splitline):
 
 def main(msa_path, config_path, tree_path, gff_paths=None,
          out=False, scale_factor=1.0, highlight=None,
-         root=None, hide_nodes=False, domain_annotation=None):
+         root=None, hide_nodes=False, domain_annotation=None,
+         lineseq=False):
     d = DomTreeMaker(
          msa_path=msa_path,
          config_path=config_path,
@@ -507,6 +512,7 @@ def main(msa_path, config_path, tree_path, gff_paths=None,
          root=root,
          hide_nodes=hide_nodes,
          domain_annotation=domain_annotation,
+         lineseq=lineseq,
     )
     d.get_domain_annot_paths()
     if msa_path is not None:
@@ -573,6 +579,9 @@ if __name__ == '__main__':
     add_args.add_argument('-hn', '--hide_nodes', help='Hide terminal nodes '
                           'that contain the specified substring; e.g. use '
                           '"FBpp" to hide all Drosophila proteins', nargs='+')
+    add_args.add_argument('--lineseq', action='store_true',
+                          help='Draw a simple line instead of the amino acid / '
+                          'nucleotide sequence')
 
     args = parser.parse_args()
 
@@ -595,4 +604,5 @@ Read the help (--help) for further information.'''
          highlight=args.highlight,
          root=args.root,
          hide_nodes=args.hide_nodes,
+         lineseq=args.lineseq,
     )
