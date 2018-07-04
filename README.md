@@ -29,13 +29,12 @@ showTree requires Python2.7 or Python3.4+ and the following Python packages:
 `pip install biopython`
 
 
-The protein domain annotation must be in the output format of pfam_scan.pl which you can [download here](ftp://ftp.ebi.ac.uk/pub/databases/Pfam/Tools/).
+The protein domain annotation must be in the output format of pfam_scan.pl which you can download here: ftp://ftp.ebi.ac.uk/pub/databases/Pfam/Tools/ .
 
 <details>
   <summary>note for bornberglab-members who use calcTree (click to expand)</summary>
-The input files (MSA and gene tree) may also be computed with [calcTree](https://ebbgit.uni-muenster.de/ckeme_01/geneSearch/wikis/calcTree).
-showTree can also parse the [calcTree](https://ebbgit.uni-muenster.de/ckeme_01/geneSearch/wikis/calcTree)
-config file to automatically find the domain annotation of proteins in the MSA.
+The input files (MSA and gene tree) may also be computed with calcTree (https://ebbgit.uni-muenster.de/ckeme_01/geneSearch/wikis/calcTree).
+showTree can also parse the calcTree config file to automatically find the domain annotation of proteins in the MSA.
 </details>
 
 Usage
