@@ -1,0 +1,1 @@
+showTree.py -m InR_alignment.fa -t InR_tree.nwk -d InR_domains.pfam -s 0.3

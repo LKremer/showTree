@@ -1,0 +1,233 @@
+# pfam_scan.pl,  run at Mon Dec  4 10:50:14 2017
+#
+# Copyright (c) 2009 Genome Research Ltd
+# Freely distributed under the GNU 
+# General Public License
+#
+# Authors: Jaina Mistry (jm14@sanger.ac.uk), John Tate (jt6@sanger.ac.uk), 
+#          Rob Finn (rdf@sanger.ac.uk)
+#
+# This is free software; you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later version.
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <http://www.gnu.org/licenses/>. 
+# = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+#      query sequence file: thesis_InRs_2outgrp.fa
+#        searching against: /global/databases/pfam/v30.0//Pfam-A.hmm, with cut off --cut_ga
+#    resolve clan overlaps: on
+#     predict active sites: off
+# = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+#
+# <seq id> <alignment start> <alignment end> <envelope start> <envelope end> <hmm acc> <hmm name> <type> <hmm start> <hmm end> <hmm length> <bit score> <E-value> <significance> <clan>
+
+EFX62637.1         99    177     99    182 PF01030.22  Recep_L_domain    Domain     1    76   112     39.2   5.6e-10   1 CL0022   
+EFX62637.1        222    336    222    343 PF01030.22  Recep_L_domain    Domain     1   104   112     73.7   1.1e-20   1 CL0022   
+EFX62637.1        776    854    773    855 PF00041.19  fn3               Domain     9    84    85     25.4   1.2e-05   1 CL0159   
+EFX62637.1        894   1161    892   1161 PF07714.15  Pkinase_Tyr       Domain     3   260   260    315.0   2.9e-94   1 CL0016   
+EFX63421.1         80    191     80    193 PF01030.22  Recep_L_domain    Domain     1   110   112     82.3   2.3e-23   1 CL0022   
+EFX63421.1        211    380    200    380 PF00757.18  Furin-like        Domain     8   149   149     84.2   7.2e-24   1 CL0547   
+EFX63421.1        395    509    395    516 PF01030.22  Recep_L_domain    Domain     1   104   112     73.2   1.6e-20   1 CL0022   
+EFX63421.1       1062   1323   1060   1323 PF07714.15  Pkinase_Tyr       Domain     3   260   260    307.0   8.6e-92   1 CL0016   
+EFX85280.1         81    192     81    194 PF01030.22  Recep_L_domain    Domain     1   110   112     86.1   1.6e-24   1 CL0022   
+EFX85280.1        212    378    202    378 PF00757.18  Furin-like        Domain     8   149   149     86.1     2e-24   1 CL0547   
+EFX85280.1        393    507    393    514 PF01030.22  Recep_L_domain    Domain     1   104   112     70.3   1.2e-19   1 CL0022   
+EFX85280.1        980   1249    979   1250 PF07714.15  Pkinase_Tyr       Domain     2   259   260    264.7   6.9e-79   1 CL0016   
+EFX85381.1         99    210     99    212 PF01030.22  Recep_L_domain    Domain     1   110   112     81.9     3e-23   1 CL0022   
+EFX85381.1        230    399    220    399 PF00757.18  Furin-like        Domain     8   149   149     83.9   9.3e-24   1 CL0547   
+EFX85381.1        414    528    414    535 PF01030.22  Recep_L_domain    Domain     1   104   112     73.1   1.6e-20   1 CL0022   
+EFX85381.1        968   1046    965   1047 PF00041.19  fn3               Domain     9    84    85     24.9   1.8e-05   1 CL0159   
+EFX85381.1       1086   1181   1084   1245 PF07714.15  Pkinase_Tyr       Domain     3    98   260     75.6   3.2e-21   1 CL0016   
+EFX85381.1       1415   1680   1413   1680 PF07714.15  Pkinase_Tyr       Domain     3   260   260    310.3   8.2e-93   1 CL0016   
+aug3.g2988.t1      52    163     52    164 PF01030.22  Recep_L_domain    Domain     1   111   112     98.0   3.1e-28   1 CL0022   
+aug3.g2988.t1     181    344    179    345 PF00757.18  Furin-like        Domain     3   148   149     98.4     3e-28   1 CL0547   
+aug3.g2988.t1     360    470    360    476 PF01030.22  Recep_L_domain    Domain     1   105   112     92.1   2.2e-26   1 CL0022   
+aug3.g2988.t1     859    938    852    939 PF00041.19  fn3               Domain     9    84    85     25.2   1.4e-05   1 CL0159   
+aug3.g2988.t1    1019   1281   1018   1282 PF07714.15  Pkinase_Tyr       Domain     2   259   260    302.4   2.1e-90   1 CL0016   
+aug3.g17156.t1     67    178     67    179 PF01030.22  Recep_L_domain    Domain     1   111   112     90.6   6.1e-26   1 CL0022   
+aug3.g17156.t1    195    353    192    354 PF00757.18  Furin-like        Domain     2   148   149    103.0   1.2e-29   1 CL0547   
+aug3.g17156.t1    369    479    369    485 PF01030.22  Recep_L_domain    Domain     1   105   112     93.3   9.1e-27   1 CL0022   
+aug3.g17156.t1   1048   1312   1047   1314 PF07714.15  Pkinase_Tyr       Domain     2   258   260    316.3   1.2e-94   1 CL0016   
+Bger_InR2         100    196    100    215 PF01030.22  Recep_L_domain    Domain     1    95   112     41.5   1.1e-10   1 CL0022   
+Bger_InR2         332    456    322    457 PF00757.18  Furin-like        Domain    34   148   149     95.7   2.1e-27   1 CL0547   
+Bger_InR2         472    582    472    588 PF01030.22  Recep_L_domain    Domain     1   105   112     87.4   6.1e-25   1 CL0022   
+Bger_InR2         978   1053    968   1055 PF00041.19  fn3               Domain    13    83    85     30.5     3e-07   1 CL0159   
+Bger_InR2        1134   1400   1133   1400 PF07714.15  Pkinase_Tyr       Domain     2   260   260    325.5     2e-97   1 CL0016   
+Bger_InR3          26    137     26    138 PF01030.22  Recep_L_domain    Domain     1   111   112     82.0   2.8e-23   1 CL0022   
+Bger_InR3         156    296    145    297 PF00757.18  Furin-like        Domain    13   148   149     70.9   9.2e-20   1 CL0547   
+Bger_InR3         315    423    315    428 PF01030.22  Recep_L_domain    Domain     1   103   112     80.5   8.5e-23   1 CL0022   
+Bger_InR3         460    549    457    556 PF00041.19  fn3               Domain     7    80    85     28.6   1.2e-06   1 CL0159   
+Bger_InR3         943   1197    941   1197 PF07714.15  Pkinase_Tyr       Domain     3   260   260    299.9   1.2e-89   1 CL0016   
+Acep_InR1         158    269    158    270 PF01030.22  Recep_L_domain    Domain     1   111   112     89.9     1e-25   1 CL0022   
+Acep_InR1         282    421    279    422 PF00757.18  Furin-like        Domain     4   148   149     74.5     7e-21   1 CL0547   
+Acep_InR1         439    546    438    552 PF01030.22  Recep_L_domain    Domain     3   106   112     74.5   6.3e-21   1 CL0022   
+Acep_InR1        1078   1332   1077   1332 PF07714.15  Pkinase_Tyr       Domain     2   260   260    299.7   1.4e-89   1 CL0016   
+Acep_InR2          93    202     93    205 PF01030.22  Recep_L_domain    Domain     1   109   112     81.8   3.4e-23   1 CL0022   
+Acep_InR2         226    352    222    353 PF00757.18  Furin-like        Domain    34   148   149     83.4   1.3e-23   1 CL0547   
+Acep_InR2         368    483    368    488 PF01030.22  Recep_L_domain    Domain     1   107   112     99.5     1e-28   1 CL0022   
+Acep_InR2         882    958    875    960 PF00041.19  fn3               Domain    12    83    85     24.6   2.1e-05   1 CL0159   
+Acep_InR2        1037   1303   1037   1303 PF07714.15  Pkinase_Tyr       Domain     1   260   260    316.4   1.1e-94   1 CL0016   
+Aech_InR1         158    269    158    270 PF01030.22  Recep_L_domain    Domain     1   111   112     89.9     1e-25   1 CL0022   
+Aech_InR1         282    421    279    422 PF00757.18  Furin-like        Domain     4   148   149     74.5   7.3e-21   1 CL0547   
+Aech_InR1         439    546    438    552 PF01030.22  Recep_L_domain    Domain     3   106   112     75.3   3.5e-21   1 CL0022   
+Aech_InR1        1078   1332   1077   1332 PF07714.15  Pkinase_Tyr       Domain     2   260   260    299.7   1.4e-89   1 CL0016   
+Aech_InR2           2     37      1     40 PF01030.22  Recep_L_domain    Domain    73   109   112     27.4   2.6e-06   1 CL0022   
+Aech_InR2          59    211     53    212 PF00757.18  Furin-like        Domain     5   148   149     90.6   8.1e-26   1 CL0547   
+Aech_InR2         227    342    227    347 PF01030.22  Recep_L_domain    Domain     1   107   112     99.7   9.4e-29   1 CL0022   
+Aech_InR2         896   1162    896   1162 PF07714.15  Pkinase_Tyr       Domain     1   260   260    316.6   9.8e-95   1 CL0016   
+Csec_InR2         274    385    274    386 PF01030.22  Recep_L_domain    Domain     1   111   112     82.0   2.8e-23   1 CL0022   
+Csec_InR2         400    555    399    555 PF00757.18  Furin-like        Domain     2   149   149    108.3   2.7e-31   1 CL0547   
+Csec_InR2         570    682    570    686 PF01030.22  Recep_L_domain    Domain     1   107   112     87.5   5.6e-25   1 CL0022   
+Csec_InR2        1081   1162   1078   1163 PF00041.19  fn3               Domain     8    84    85     32.5   7.4e-08   1 CL0159   
+Csec_InR2        1241   1507   1240   1507 PF07714.15  Pkinase_Tyr       Domain     2   260   260    325.7   1.6e-97   1 CL0016   
+Csec_InR3          69    180     69    181 PF01030.22  Recep_L_domain    Domain     1   111   112     86.1   1.5e-24   1 CL0022   
+Csec_InR3         199    338    187    339 PF00757.18  Furin-like        Domain    14   148   149     65.9   3.2e-18   1 CL0547   
+Csec_InR3         357    465    357    471 PF01030.22  Recep_L_domain    Domain     1   104   112     84.8   3.8e-24   1 CL0022   
+Csec_InR3         993   1247    992   1250 PF07714.15  Pkinase_Tyr       Domain     2   257   260    294.3   6.2e-88   1 CL0016   
+Hsal_InR2           2     37      1     40 PF01030.22  Recep_L_domain    Domain    73   109   112     28.5   1.2e-06   1 CL0022   
+Hsal_InR2          59    208     55    209 PF00757.18  Furin-like        Domain     5   148   149     99.7   1.3e-28   1 CL0547   
+Hsal_InR2         224    337    224    343 PF01030.22  Recep_L_domain    Domain     1   105   112     92.8   1.3e-26   1 CL0022   
+Hsal_InR2         887   1153    887   1154 PF07714.15  Pkinase_Tyr       Domain     1   259   260    313.8   6.8e-94   1 CL0016   
+Hsal_InR1         158    269    158    270 PF01030.22  Recep_L_domain    Domain     1   111   112     90.9     5e-26   1 CL0022   
+Hsal_InR1         286    419    277    421 PF00757.18  Furin-like        Domain     8   147   149     73.9   1.1e-20   1 CL0547   
+Hsal_InR1         438    546    437    551 PF01030.22  Recep_L_domain    Domain     3   107   112     72.8     2e-20   1 CL0022   
+Hsal_InR1        1089   1342   1088   1342 PF07714.15  Pkinase_Tyr       Domain     2   260   260    297.0   9.4e-89   1 CL0016   
+Lhum_InR1         155    266    155    267 PF01030.22  Recep_L_domain    Domain     1   111   112     91.1   4.4e-26   1 CL0022   
+Lhum_InR1         280    416    268    418 PF00757.18  Furin-like        Domain    21   147   149     68.1   6.7e-19   1 CL0547   
+Lhum_InR1         435    541    434    547 PF01030.22  Recep_L_domain    Domain     3   105   112     79.2   2.1e-22   1 CL0022   
+Lhum_InR1        1081   1335   1080   1335 PF07714.15  Pkinase_Tyr       Domain     2   260   260    298.6     3e-89   1 CL0016   
+Lhum_InR2          37     97     29    100 PF01030.22  Recep_L_domain    Domain    47   109   112     54.1   1.3e-14   1 CL0022   
+Lhum_InR2         119    268    115    269 PF00757.18  Furin-like        Domain     5   148   149     97.7     5e-28   1 CL0547   
+Lhum_InR2         284    400    284    404 PF01030.22  Recep_L_domain    Domain     1   108   112     99.5   1.1e-28   1 CL0022   
+Lhum_InR2         796    873    786    875 PF00041.19  fn3               Domain    11    83    85     25.5   1.2e-05   1 CL0159   
+Lhum_InR2         953   1218    953   1218 PF07714.15  Pkinase_Tyr       Domain     1   260   260    318.8   2.1e-95   1 CL0016   
+Mnat_InR1          64    175     64    176 PF01030.22  Recep_L_domain    Domain     1   111   112     81.4   4.3e-23   1 CL0022   
+Mnat_InR1         187    333    176    334 PF00757.18  Furin-like        Domain    13   148   149     77.4   8.9e-22   1 CL0547   
+Mnat_InR1         349    462    349    467 PF01030.22  Recep_L_domain    Domain     1   105   112     85.3   2.6e-24   1 CL0022   
+Mnat_InR1         847    929    844    930 PF00041.19  fn3               Domain     7    84    85     26.2   6.9e-06   1 CL0159   
+Mnat_InR1        1010   1268   1010   1268 PF07714.15  Pkinase_Tyr       Domain     1   260   260    300.8   6.4e-90   1 CL0016   
+Mnat_InR3          25    136     25    137 PF01030.22  Recep_L_domain    Domain     1   111   112     85.0   3.3e-24   1 CL0022   
+Mnat_InR3         155    324    144    325 PF00757.18  Furin-like        Domain    14   148   149     60.2   1.8e-16   1 CL0547   
+Mnat_InR3         343    451    343    457 PF01030.22  Recep_L_domain    Domain     1   104   112     83.1   1.3e-23   1 CL0022   
+Mnat_InR3         979   1234    978   1236 PF07714.15  Pkinase_Tyr       Domain     2   258   260    294.2   6.5e-88   1 CL0016   
+Mnat_InR3        1257   1394   1255   1399 PF00994.22  MoCF_biosynth     Domain     5   138   144     97.0   6.8e-28   1 No_clan  
+Mnat_InR3        1475   1641   1474   1641 PF03453.15  MoeA_N            Family     2   115   115    115.5   1.2e-33   1 No_clan  
+Mnat_InR3        1655   1796   1654   1797 PF00994.22  MoCF_biosynth     Domain     2   143   144     83.7   8.7e-24   1 No_clan  
+Mnat_InR2          19    130     19    131 PF01030.22  Recep_L_domain    Domain     1   111   112     84.7   4.1e-24   1 CL0022   
+Mnat_InR2         145    300    144    300 PF00757.18  Furin-like        Domain     2   149   149    107.8   3.9e-31   1 CL0547   
+Mnat_InR2         315    428    315    432 PF01030.22  Recep_L_domain    Domain     1   108   112     89.2   1.6e-25   1 CL0022   
+Mnat_InR2         781    860    777    862 PF00041.19  fn3               Domain     9    83    85     30.2   3.8e-07   1 CL0159   
+Mnat_InR2         939   1201    938   1202 PF07714.15  Pkinase_Tyr       Domain     2   259   260    322.5   1.5e-96   1 CL0016   
+Pbar_InR1         158    269    158    270 PF01030.22  Recep_L_domain    Domain     1   111   112     92.2     2e-26   1 CL0022   
+Pbar_InR1         290    411    269    413 PF00757.18  Furin-like        Domain    13   147   149     68.4   5.6e-19   1 CL0547   
+Pbar_InR1         430    533    428    539 PF01030.22  Recep_L_domain    Domain     3   104   112     79.8   1.3e-22   1 CL0022   
+Pbar_InR1        1069   1326   1068   1326 PF07714.15  Pkinase_Tyr       Domain     2   260   260    302.9   1.5e-90   1 CL0016   
+Pbar_InR2          86    195     86    198 PF01030.22  Recep_L_domain    Domain     1   109   112     84.5   4.9e-24   1 CL0022   
+Pbar_InR2         223    344    218    344 PF00757.18  Furin-like        Domain    35   149   149     82.3   2.8e-23   1 CL0547   
+Pbar_InR2         359    476    359    481 PF01030.22  Recep_L_domain    Domain     1   107   112     94.8   3.1e-27   1 CL0022   
+Pbar_InR2        1019   1283   1019   1285 PF07714.15  Pkinase_Tyr       Domain     1   258   260    316.1   1.4e-94   1 CL0016   
+Tcas_InR1         189    299    189    301 PF01030.22  Recep_L_domain    Domain     1   110   112     69.9   1.6e-19   1 CL0022   
+Tcas_InR1         432    543    432    546 PF01030.22  Recep_L_domain    Domain     1   109   112     75.9   2.2e-21   1 CL0022   
+Tcas_InR1        1032   1289   1032   1289 PF07714.15  Pkinase_Tyr       Domain     1   260   260    295.7   2.3e-88   1 CL0016   
+Tcas_InR2          47    158     47    159 PF01030.22  Recep_L_domain    Domain     1   111   112     79.6   1.6e-22   1 CL0022   
+Tcas_InR2         201    347    190    348 PF00757.18  Furin-like        Domain     9   148   149     94.6   4.5e-27   1 CL0547   
+Tcas_InR2         363    474    363    478 PF01030.22  Recep_L_domain    Domain     1   107   112     89.9     1e-25   1 CL0022   
+Tcas_InR2         620    662    619    698 PF00041.19  fn3               Domain     2    44    85     25.7     1e-05   1 CL0159   
+Tcas_InR2         992   1260    992   1261 PF07714.15  Pkinase_Tyr       Domain     1   259   260    328.6   2.2e-98   1 CL0016   
+Znev_InR3          63    173     63    175 PF01030.22  Recep_L_domain    Domain     1   110   112     86.2   1.4e-24   1 CL0022   
+Znev_InR3         191    331    181    332 PF00757.18  Furin-like        Domain    12   148   149     67.8   8.2e-19   1 CL0547   
+Znev_InR3         350    458    350    464 PF01030.22  Recep_L_domain    Domain     1   104   112     85.2   2.8e-24   1 CL0022   
+Znev_InR3         986   1241    985   1243 PF07714.15  Pkinase_Tyr       Domain     2   258   260    294.8   4.3e-88   1 CL0016   
+Znev_InR1          71    181     71    183 PF01030.22  Recep_L_domain    Domain     1   110   112     80.4   8.9e-23   1 CL0022   
+Znev_InR1         196    341    180    342 PF00757.18  Furin-like        Domain    21   148   149     69.5   2.5e-19   1 CL0547   
+Znev_InR1         357    470    357    475 PF01030.22  Recep_L_domain    Domain     1   105   112     87.0   7.9e-25   1 CL0022   
+Znev_InR1         886    968    884    969 PF00041.19  fn3               Domain     7    84    85     24.6   2.1e-05   1 CL0159   
+Znev_InR1        1049   1307   1049   1307 PF07714.15  Pkinase_Tyr       Domain     1   260   260    297.4   6.9e-89   1 CL0016   
+Znev_InR2          49    160     49    161 PF01030.22  Recep_L_domain    Domain     1   111   112     80.0   1.2e-22   1 CL0022   
+Znev_InR2         177    331    176    332 PF00757.18  Furin-like        Domain     2   148   149    109.3   1.4e-31   1 CL0547   
+Znev_InR2         347    458    347    463 PF01030.22  Recep_L_domain    Domain     1   106   112     88.8   2.2e-25   1 CL0022   
+Znev_InR2         812    892    809    894 PF00041.19  fn3               Domain     8    83    85     33.3   4.1e-08   1 CL0159   
+Znev_InR2         972   1245    971   1246 PF07714.15  Pkinase_Tyr       Domain     2   259   260    320.1   8.5e-96   1 CL0016   
+Znev_InR2        1427   1506   1419   1506 PF00595.22  PDZ               Domain     8    81    82     31.0   2.2e-07   1 CL0466   
+Aaeg_InR          250    360    250    362 PF01030.22  Recep_L_domain    Domain     1   110   112     81.5   4.2e-23   1 CL0022   
+Aaeg_InR          400    554    391    554 PF00757.18  Furin-like        Domain     8   149   149    109.7     1e-31   1 CL0547   
+Aaeg_InR          569    678    569    682 PF01030.22  Recep_L_domain    Domain     1   107   112     83.2   1.3e-23   1 CL0022   
+Aaeg_InR         1067   1147   1058   1147 PF00041.19  fn3               Domain     9    85    85     34.9   1.4e-08   1 CL0159   
+Aaeg_InR         1225   1491   1222   1491 PF07714.15  Pkinase_Tyr       Domain     4   260   260    318.0   3.7e-95   1 CL0016   
+Amel_InR1         149    260    149    261 PF01030.22  Recep_L_domain    Domain     1   111   112     93.8   6.1e-27   1 CL0022   
+Amel_InR1         275    408    261    410 PF00757.18  Furin-like        Domain    22   147   149     75.2   4.3e-21   1 CL0547   
+Amel_InR1         427    532    426    538 PF01030.22  Recep_L_domain    Domain     3   104   112     80.1   1.1e-22   1 CL0022   
+Amel_InR1        1092   1346   1091   1346 PF07714.15  Pkinase_Tyr       Domain     2   260   260    295.9     2e-88   1 CL0016   
+Amel_InR2          22    133     22    134 PF01030.22  Recep_L_domain    Domain     1   111   112     84.6   4.6e-24   1 CL0022   
+Amel_InR2         153    303    146    304 PF00757.18  Furin-like        Domain     5   148   149     93.3   1.2e-26   1 CL0547   
+Amel_InR2         319    434    319    438 PF01030.22  Recep_L_domain    Domain     1   107   112     98.2   2.7e-28   1 CL0022   
+Amel_InR2         814    894    809    896 PF00041.19  fn3               Domain     8    83    85     24.5   2.3e-05   1 CL0159   
+Amel_InR2         974   1238    973   1238 PF07714.15  Pkinase_Tyr       Domain     2   260   260    311.8   2.8e-93   1 CL0016   
+Cflo_InR2          28    137     28    140 PF01030.22  Recep_L_domain    Domain     1   109   112     84.0     7e-24   1 CL0022   
+Cflo_InR2         159    311    154    311 PF00757.18  Furin-like        Domain     5   149   149     98.4   3.2e-28   1 CL0547   
+Cflo_InR2         326    441    326    446 PF01030.22  Recep_L_domain    Domain     1   107   112     97.8   3.6e-28   1 CL0022   
+Cflo_InR2         998   1261    997   1263 PF07714.15  Pkinase_Tyr       Domain     2   258   260    316.3   1.2e-94   1 CL0016   
+Dmel_InR          356    464    356    465 PF01030.22  Recep_L_domain    Domain     1   111   112     95.1   2.5e-27   1 CL0022   
+Dmel_InR          510    648    497    648 PF00757.18  Furin-like        Domain    13   149   149    107.8   3.8e-31   1 CL0547   
+Dmel_InR          663    777    663    782 PF01030.22  Recep_L_domain    Domain     1   107   112     77.0     1e-21   1 CL0022   
+Dmel_InR         1375   1649   1371   1650 PF07714.15  Pkinase_Tyr       Domain     5   259   260    304.1   6.3e-91   1 CL0016   
+Nvit_InR          172    283    172    284 PF01030.22  Recep_L_domain    Domain     1   111   112     78.6   3.2e-22   1 CL0022   
+Nvit_InR          294    399    287    399 PF00757.18  Furin-like        Domain    53   149   149     70.9   9.4e-20   1 CL0547   
+Nvit_InR          414    527    414    533 PF01030.22  Recep_L_domain    Domain     1   105   112     85.1   3.1e-24   1 CL0022   
+Nvit_InR          968   1049    965   1050 PF00041.19  fn3               Domain     8    84    85     35.7   7.7e-09   1 CL0159   
+Nvit_InR         1130   1396   1129   1396 PF07714.15  Pkinase_Tyr       Domain     2   260   260    308.3   3.5e-92   1 CL0016   
+Rpro_InR1          48    158     48    159 PF01030.22  Recep_L_domain    Domain     1   111   112     68.7   3.8e-19   1 CL0022   
+Rpro_InR1         181    319    169    319 PF00757.18  Furin-like        Domain    18   149   149     80.8     8e-23   1 CL0547   
+Rpro_InR1         334    449    334    455 PF01030.22  Recep_L_domain    Domain     1   104   112     77.9   5.4e-22   1 CL0022   
+Rpro_InR1         979   1235    978   1235 PF07714.15  Pkinase_Tyr       Domain     2   260   260    282.6   2.3e-84   1 CL0016   
+Sinv_InR2          34    161      7    162 PF00757.18  Furin-like        Domain    34   148   149     77.7   7.3e-22   1 CL0547   
+Sinv_InR2         177    289    177    295 PF01030.22  Recep_L_domain    Domain     1   105   112     88.6   2.6e-25   1 CL0022   
+Sinv_InR2         876   1131    876   1133 PF07714.15  Pkinase_Tyr       Domain     1   258   260    289.1   2.3e-86   1 CL0016   
+Sinv_InR1         160    271    160    272 PF01030.22  Recep_L_domain    Domain     1   111   112     93.5   7.8e-27   1 CL0022   
+Sinv_InR1         292    430    274    432 PF00757.18  Furin-like        Domain    13   147   149     48.8   6.1e-13   1 CL0547   
+Sinv_InR1         449    556    448    562 PF01030.22  Recep_L_domain    Domain     3   106   112     78.6   3.2e-22   1 CL0022   
+Sinv_InR1        1095   1349   1094   1349 PF07714.15  Pkinase_Tyr       Domain     2   260   260    295.0   3.8e-88   1 CL0016   
+Edan_InR2          19    129     19    135 PF01030.22  Recep_L_domain    Domain     1   105   112     91.1   4.2e-26   1 CL0022   
+Edan_InR2         703    973    703    973 PF07714.15  Pkinase_Tyr       Domain     1   260   260    315.9   1.6e-94   1 CL0016   
+Edan_InR1          59    173     59    174 PF01030.22  Recep_L_domain    Domain     1   111   112     72.5   2.6e-20   1 CL0022   
+Edan_InR1         195    305    180    306 PF00757.18  Furin-like        Domain    47   148   149     64.3     1e-17   1 CL0547   
+Edan_InR1         321    431    321    437 PF01030.22  Recep_L_domain    Domain     1   105   112     81.2   5.2e-23   1 CL0022   
+Edan_InR1         752    841    751    841 PF00041.19  fn3               Domain     2    85    85     29.9   4.7e-07   1 CL0159   
+Edan_InR1         923   1181    922   1181 PF07714.15  Pkinase_Tyr       Domain     2   260   260    312.3     2e-93   1 CL0016   
+Smar_InR           54    165     54    166 PF01030.22  Recep_L_domain    Domain     1   111   112     90.0   9.4e-26   1 CL0022   
+Smar_InR          179    332    177    332 PF00757.18  Furin-like        Domain     3   149   149    101.2   4.2e-29   1 CL0547   
+Smar_InR          347    458    347    462 PF01030.22  Recep_L_domain    Domain     1   107   112     73.3   1.5e-20   1 CL0022   
+Smar_InR          491    586    488    591 PF00041.19  fn3               Domain     7    80    85     25.9   8.6e-06   1 CL0159   
+Smar_InR          820    900    816    901 PF00041.19  fn3               Domain     8    84    85     24.9   1.7e-05   1 CL0159   
+Smar_InR          983   1262    982   1262 PF07714.15  Pkinase_Tyr       Domain     2   260   260    305.4   2.6e-91   1 CL0016   
+Cflo_InR1         150    261    150    262 PF01030.22  Recep_L_domain    Domain     1   111   112     91.4   3.4e-26   1 CL0022   
+Cflo_InR1         304    425    271    427 PF00757.18  Furin-like        Domain    20   147   149     72.5   2.9e-20   1 CL0547   
+Cflo_InR1         444    550    443    556 PF01030.22  Recep_L_domain    Domain     3   105   112     75.5     3e-21   1 CL0022   
+Cflo_InR1        1092   1346   1091   1346 PF07714.15  Pkinase_Tyr       Domain     2   260   260    301.3   4.7e-90   1 CL0016   
+Csec_InR1          24    135     24    136 PF01030.22  Recep_L_domain    Domain     1   111   112     79.6   1.6e-22   1 CL0022   
+Csec_InR1         150    316    136    317 PF00757.18  Furin-like        Domain    16   148   149     58.6   5.6e-16   1 CL0547   
+Csec_InR1         332    445    332    451 PF01030.22  Recep_L_domain    Domain     1   105   112     83.5   9.5e-24   1 CL0022   
+Csec_InR1         859    941    856    942 PF00041.19  fn3               Domain     7    84    85     34.0   2.6e-08   1 CL0159   
+Csec_InR1        1022   1280   1022   1280 PF07714.15  Pkinase_Tyr       Domain     1   260   260    296.5   1.3e-88   1 CL0016   
+Rpro_InR2         392    501    392    504 PF01030.22  Recep_L_domain    Domain     1   109   112     82.7   1.7e-23   1 CL0022   
+Rpro_InR2         521    678    519    679 PF00757.18  Furin-like        Domain     3   148   149     97.4   6.3e-28   1 CL0547   
+Rpro_InR2         694    816    694    822 PF01030.22  Recep_L_domain    Domain     1   104   112     79.8   1.4e-22   1 CL0022   
+Rpro_InR2        1062   1338   1061   1338 PF07714.15  Pkinase_Tyr       Domain     2   260   260    302.7   1.7e-90   1 CL0016   
+Bger_InR1          59    170     59    171 PF01030.22  Recep_L_domain    Domain     1   111   112     87.7   4.7e-25   1 CL0022   
+Bger_InR1         180    325    165    326 PF00757.18  Furin-like        Domain    18   148   149     72.2   3.6e-20   1 CL0547   
+Bger_InR1         341    450    341    455 PF01030.22  Recep_L_domain    Domain     1   105   112     79.6   1.6e-22   1 CL0022   
+Bger_InR1         854    933    849    934 PF00041.19  fn3               Domain     9    84    85     24.5   2.3e-05   1 CL0159   
+Bger_InR1        1014   1271   1013   1271 PF07714.15  Pkinase_Tyr       Domain     2   260   260    302.9   1.5e-90   1 CL0016   
+Lmig_InR1          29    145     29    146 PF01030.22  Recep_L_domain    Domain     1   111   112     73.8   9.8e-21   1 CL0022   
+Lmig_InR1         194    293    180    295 PF00757.18  Furin-like        Domain    55   147   149     49.9   2.7e-13   1 CL0547   
+Lmig_InR1         311    423    311    428 PF01030.22  Recep_L_domain    Domain     1   105   112     75.0   4.4e-21   1 CL0022   
+Lmig_InR2          39    159     39    160 PF01030.22  Recep_L_domain    Domain     1   111   112     72.8     2e-20   1 CL0022   
+Lmig_InR2         272    372    265    372 PF00757.18  Furin-like        Domain    61   149   149     52.6   3.9e-14   1 CL0547   
+Lmig_InR2         387    498    387    503 PF01030.22  Recep_L_domain    Domain     1   106   112     93.5   7.5e-27   1 CL0022   
+Lmig_InR2         892    978    891    980 PF00041.19  fn3               Domain     3    83    85     33.2   4.4e-08   1 CL0159   
+Lmig_InR2        1057   1320   1057   1322 PF07714.15  Pkinase_Tyr       Domain     1   258   260    325.8   1.5e-97   1 CL0016   
