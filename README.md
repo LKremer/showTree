@@ -20,12 +20,6 @@ such as
 Requirements
 ------------
 
-The input files (MSA and gene tree) can be computed with [calcTree](https://ebbgit.uni-muenster.de/ckeme_01/geneSearch/wikis/calcTree).
-showTree can also parse the [calcTree](https://ebbgit.uni-muenster.de/ckeme_01/geneSearch/wikis/calcTree)
-config file to automatically find the domain annotation of proteins in the MSA.
-Alternatively, you can provide your own (pfam_scan) domain annotation.
-
-
 showTree requires Python2.7 or Python3.4+ and the following Python packages:
 - ete3
 
@@ -34,6 +28,14 @@ showTree requires Python2.7 or Python3.4+ and the following Python packages:
 
 `pip install biopython`
 
+
+The protein domain annotation must be in the output format of pfam_scan.pl which you can download here: ftp://ftp.ebi.ac.uk/pub/databases/Pfam/Tools/ .
+
+<details>
+  <summary>note for bornberglab-members who use calcTree (click to expand)</summary>
+The input files (MSA and gene tree) may also be computed with calcTree (https://ebbgit.uni-muenster.de/ckeme_01/geneSearch/wikis/calcTree).
+showTree can also parse the calcTree config file to automatically find the domain annotation of proteins in the MSA.
+</details>
 
 Usage
 ------------
@@ -98,6 +100,6 @@ Example output
 ------------
 
 An example output tree that was generated with the command
-`showTree -m ORTHO_ALL1421_aln.fa -c geneSearchConfig.txt -t RAxML_bipartitions.ORTHO_ALL1421_aln.tree -s 0.5 -o tree.pdf`
+`showTree -m ORTHO_ALL1421_aln.fa -d ORTHO_ALL1432.pfamscan -t RAxML_bipartitions.ORTHO_ALL1421_aln.tree -s 0.5 -o tree.pdf`
 
 ![example_tree](http://i.imgur.com/k52BxkR.png)
