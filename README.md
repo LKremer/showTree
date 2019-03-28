@@ -20,7 +20,7 @@ such as
 Requirements
 ------------
 
-showTree requires Python2.7 or Python3.4+ and the following Python packages:
+showTree requires Python2.7 or Python3.4 or higher and the following Python packages:
 - ete3
 
 `pip install 'ete3==3.0.0b35'`
@@ -29,6 +29,8 @@ showTree requires Python2.7 or Python3.4+ and the following Python packages:
 `pip install biopython`
 
 
+It is absolutely crucial that you're using ete3 version 3.0.0b35 and not the latest version. The latest version simply won't work because some
+classes that showTree depends on were silently removed from ete3.
 The protein domain annotation must be in the output format of pfam_scan.pl which you can download here: ftp://ftp.ebi.ac.uk/pub/databases/Pfam/Tools/ .
 
 <details>
@@ -45,7 +47,7 @@ usage: showTree.py [-h] [-m MSA] [-t TREE]
                    [-d DOMAIN_ANNOTATIONS [DOMAIN_ANNOTATIONS ...]]
                    [-c CONFIG] [-g GFFS [GFFS ...]] [-o OUTPUT_PATH]
                    [-s SCALE_FACTOR] [-hl [HIGHLIGHT [HIGHLIGHT ...]]]
-                   [-r ROOT] [-hn HIDE_NODES [HIDE_NODES ...]]
+                   [-r ROOT] [-hn HIDE_NODES [HIDE_NODES ...]] [--lineseq]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -94,6 +96,8 @@ additional optional arguments:
                         Hide terminal nodes that contain the specified
                         substring; e.g. use "FBpp" to hide all Drosophila
                         proteins
+  --lineseq             Draw a simple line instead of the amino acid /
+                        nucleotide sequence
 ```
 
 Example output
